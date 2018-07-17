@@ -10,7 +10,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new MaterialApp(
-      home: new MainPage(title: 'elbiSerwiss'),
+      home: new MainPage(title: 'elbiSerwis'),
     );
   }
 }
@@ -26,32 +26,43 @@ class MainPage extends StatefulWidget {
 class MainPageState extends State<MainPage>
     with SingleTickerProviderStateMixin {
   TabController controller;
+  final List<MyTabs> tabs = [
+    new MyTabs(title: "Panel Główny"),
+    new MyTabs(title: "Klienci"),
+    new MyTabs(title: "Dodaj klienta"),
+    new MyTabs(title: "Raporty"),
+  ];
+  MyTabs myHandler;
 
   @override
   void initState() {
     super.initState();
     controller = new TabController(vsync: this, length: 4);
+    myHandler = tabs[0];
+    controller.addListener(handleSelected);
+  }
+
+  void handleSelected() {
+    setState(() {
+      myHandler = tabs[controller.index];
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
       appBar: new AppBar(
-          title: new Text("elbiSerwis"),
-          backgroundColor: Colors.deepOrangeAccent,
+        title: new Text(myHandler.title),
+        backgroundColor: Colors.deepOrangeAccent,
       ),
       bottomNavigationBar: new Material(
-        color: Colors.deepOrangeAccent,
-        child: new TabBar(
-          controller: controller,
-          tabs: <Tab>[
+          color: Colors.deepOrangeAccent,
+          child: new TabBar(controller: controller, tabs: <Tab>[
             new Tab(icon: new Icon(Icons.home)),
             new Tab(icon: new Icon(Icons.people)),
             new Tab(icon: new Icon(Icons.add_box)),
             new Tab(icon: new Icon(Icons.view_list))
-          ]
-        )
-      ),
+          ])),
       body: new TabBarView(
         controller: controller,
         children: <Widget>[
@@ -63,4 +74,10 @@ class MainPageState extends State<MainPage>
       ),
     );
   }
+}
+
+class MyTabs {
+  final String title;
+  final Color color;
+  MyTabs({this.title, this.color});
 }
