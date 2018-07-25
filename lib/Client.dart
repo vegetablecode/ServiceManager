@@ -14,4 +14,23 @@ class Client {
   var printerLease = false; // dzierzawa
 
   Client(this.name, this.nip, this.contractPer, this.rate, this.deviceName, this.freeCopies, this.pagePrice, this.quaterRate, this.tonerIncluded, this.printerLease);
+
+  // debug
+  void display() {
+    print(name);
+    print(nip);
+    print(contractPer);
+    print(rate);
+    print(deviceName);
+    print(freeCopies);
+    print(pagePrice);
+    print(quaterRate);
+    print(tonerIncluded);
+    print(printerLease);
+  }
+
+  void toJSON() {
+    
+  }
+
 }

@@ -17,8 +17,13 @@ class NewClientWidget extends StatefulWidget {
 
 class NewClientState extends State<NewClientWidget> {
   // controllers
-  TextEditingController nazwaKlienta = new TextEditingController();
+  TextEditingController name = new TextEditingController();
   TextEditingController nip = new TextEditingController();
+  TextEditingController contractPer = new TextEditingController();
+  TextEditingController rate = new TextEditingController();
+  TextEditingController deviceName = new TextEditingController();
+  TextEditingController freeCopies = new TextEditingController();
+  TextEditingController pagePrice = new TextEditingController();
 
   // checkbox values
   var quaterRate = false; // rozliczenie kwartalne (false -> miesieczne)
@@ -27,7 +32,8 @@ class NewClientState extends State<NewClientWidget> {
 
   void onPressed() {
     setState(() {
-      //Client();
+      Client tomek = Client(name.text, nip.text, int.tryParse(contractPer.text)??0, int.tryParse(rate.text)??0, deviceName.text, int.tryParse(freeCopies.text)??0, double.tryParse(pagePrice.text)??0.0, quaterRate, tonerIncluded, printerLease);
+      tomek.display();
       print("client has been created");
     });
   }
@@ -64,19 +70,29 @@ class NewClientState extends State<NewClientWidget> {
         ),
         new MyCard(
           label: "Nazwa klienta: ",
-          controller: nazwaKlienta,
+          controller: name,
+          type: TextInputType.text
         ),
         new MyCard(
           label: "NIP klienta: ",
           controller: nip,
+          type: TextInputType.text
         ),
         new MyCard(
-          label: "Okres umowy: ",
-          controller: nip,
+          label: "Okres umowy (w miesiącach): ",
+          controller: contractPer,
+          type: TextInputType.numberWithOptions(
+            signed: false,
+            decimal: false
+          ),
         ),
         new MyCard(
-          label: "Ryczałt miesięczny: ",
-          controller: nip,
+          label: "Ryczałt (zł): ",
+          controller: rate,
+          type: TextInputType.numberWithOptions(
+            signed: false,
+            decimal: false
+          ),
         ),
         new Padding(padding: new EdgeInsets.only(bottom: 20.0)),
         new Text(
@@ -86,15 +102,24 @@ class NewClientState extends State<NewClientWidget> {
         ),
         new MyCard(
           label: "Rodzaj urządzenia: ",
-          controller: nip,
+          controller: deviceName,
+          type: TextInputType.text,
         ),
         new MyCard(
           label: "Liczba darmowych kopii: ",
-          controller: nip,
+          controller: freeCopies,
+          type: TextInputType.numberWithOptions(
+            signed: false,
+            decimal: false
+          ),
         ),
         new MyCard(
-          label: "Cena za stronę: ",
-          controller: nip,
+          label: "Cena za stronę (zł): ",
+          controller: pagePrice,
+          type: TextInputType.numberWithOptions(
+            signed: false,
+            decimal: true
+          ),
         ),
         new Padding(padding: new EdgeInsets.only(bottom: 20.0)),
         new Text(
@@ -167,8 +192,9 @@ class NewClientState extends State<NewClientWidget> {
 }
 
 class MyCard extends StatelessWidget {
-  MyCard({this.label, this.controller});
+  MyCard({this.label, this.controller, this.type});
 
+  TextInputType type;
   final String label;
   final TextEditingController controller;
 
@@ -181,6 +207,7 @@ class MyCard extends StatelessWidget {
         child: new Column(
           children: <Widget>[
             new TextField(
+              keyboardType: type,
               controller: controller,
               decoration: new InputDecoration(labelText: label),
             ),
