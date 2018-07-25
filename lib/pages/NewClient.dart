@@ -78,12 +78,12 @@ class NewClientState extends State<NewClientWidget> {
   void onPressed() {
     setState(() {
       // create a new client
-      Client tomek = Client(name.text, nip.text, int.tryParse(contractPer.text)??0, int.tryParse(rate.text)??0, deviceName.text, int.tryParse(freeCopies.text)??0, double.tryParse(pagePrice.text)??0.0, quaterRate, tonerIncluded, printerLease);
+      Client tomek = Client(nip.text, int.tryParse(contractPer.text)??0, int.tryParse(rate.text)??0, deviceName.text, int.tryParse(freeCopies.text)??0, double.tryParse(pagePrice.text)??0.0, quaterRate, tonerIncluded, printerLease);
       tomek.display();
       print("client has been created");
       
       // json test #temp
-      Map<String, dynamic> userMap = tomek.toJson();
+      Map<String, dynamic> userMap = {name.text: tomek.toJson()};
       var user = new Client.fromJson(userMap);
       print(user.deviceName);
       String jsonFile = json.encode(user);

@@ -14,7 +14,6 @@ class Client {
   var printerLease = false; // dzierzawa
 
   Client(
-      this.name,
       this.nip,
       this.contractPer,
       this.rate,
@@ -40,8 +39,7 @@ class Client {
   }
 
   Client.fromJson(Map<String, dynamic> json)
-    : name = json['name'],
-      nip = json['nip'],
+    : nip = json['nip'],
       contractPer = json['contractPer'],
       rate = json['rate'],
       deviceName = json['deviceName'],
@@ -52,7 +50,6 @@ class Client {
       printerLease = json['printerLease'];
 
   Map<String, dynamic> toJson() => {
-        'name': name,
         'nip': nip,
         'contractPer': contractPer,
         'rate': rate,
