@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:io';
 import 'dart:convert';
 import 'package:path_provider/path_provider.dart';
+import './ViewClient.dart' as viewClient;
 
 class Clients extends StatelessWidget {
   @override
@@ -24,6 +25,7 @@ class ClientsState extends State<ClientsWidget> {
   String fileName = "clientsData.json";
   bool fileExist = false;
   Map<String, dynamic> fileContent;
+  var clientList;
 
   // JSON create & read
   @override
@@ -36,30 +38,56 @@ class ClientsState extends State<ClientsWidget> {
       if (fileExist)
         this.setState(
             () => fileContent = JSON.decode(jsonFile.readAsStringSync()));
+      clientList = fileContent.keys.toList();
     });
   }
 
-  void onPressed() {
+  void view(String name) {
     setState(() {
-      print(fileContent.toString());
-      print(fileContent.length);
+      print(name);
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => viewClient.ViewClient(name)),
+      );
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return new Center(
-      child: new ListView(
-        shrinkWrap: true,
-        padding: const EdgeInsets.all(20.0),
-        children: <Widget>[
-          new RaisedButton(
-            child: new Text("Check!"),
-            color: Colors.blueAccent,
-            onPressed: onPressed,
-          )
-        ],
-      ),
-    );
+    return new Scaffold(
+        body: new ListView.builder(
+            itemCount: fileContent == null ? 0 : fileContent.length,
+            itemBuilder: (BuildContext context, int index) {
+              return new Card(
+                  child: new Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  new Row(
+                    children: <Widget>[
+                      new Padding(
+                        padding: EdgeInsets.only(left: 5.0),
+                      ),
+                      new Icon(
+                        Icons.remove_circle,
+                        color: Colors.redAccent,
+                      ),
+                      new Icon(
+                        Icons.check_circle,
+                        color: Colors.green,
+                      ),
+                      new Padding(
+                        padding: EdgeInsets.only(left: 5.0),
+                      ),
+                      new Text(clientList[index]),
+                    ],
+                  ),
+                  new IconButton(
+                    icon: new Icon(Icons.remove_red_eye),
+                    color: Colors.blueAccent,
+                    onPressed: (){view(clientList[index]);},
+                  )
+                ],
+              ));
+            }));
   }
 }
