@@ -50,17 +50,40 @@ class ViewClientState extends State<ViewClientWidget> {
     });
   }
 
-  @override
+   @override
   Widget build(BuildContext context) {
     return new Scaffold(
         appBar: new AppBar(
           title: new Text("Zobacz klienta"),
           backgroundColor: Colors.green,
         ),
-        body: new Center(
-          child: new Column(
-            children: <Widget>[new Text(name)],
-          ),
+        body: ListView(
+          padding: const EdgeInsets.all(20.0),
+          children: <Widget>[
+            new Card(
+                child: new Column(
+              children: <Widget>[
+                new Text(name, style: new TextStyle(fontSize: 20.0),),
+                new Padding(padding: new EdgeInsets.only(bottom: 20.0)),
+                new Row(
+                  children: <Widget>[
+                    new Text("NIP: ", style: new TextStyle(fontWeight: FontWeight.bold ),),
+                    new Padding(padding: new EdgeInsets.only(left: 5.0)),
+                    new Text("wdwd"),
+                  ],
+                ),
+                new Padding(padding: new EdgeInsets.only(bottom: 5.0)),
+                new Row(
+                  children: <Widget>[
+                    new Text("NIP: ", style: new TextStyle(fontWeight: FontWeight.bold ),),
+                    new Padding(padding: new EdgeInsets.only(left: 5.0)),
+                    new Text("efefef"),
+                  ],
+                )
+              ],
+            ))
+          ],
         ));
   }
+
 }

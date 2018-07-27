@@ -35,10 +35,11 @@ class ClientsState extends State<ClientsWidget> {
       dir = directory;
       jsonFile = new File(dir.path + "/" + fileName);
       fileExist = jsonFile.existsSync();
-      if (fileExist)
+      if (fileExist){
         this.setState(
             () => fileContent = JSON.decode(jsonFile.readAsStringSync()));
-      clientList = fileContent.keys.toList();
+        clientList = fileContent.keys.toList();
+      }
     });
   }
 
@@ -84,7 +85,9 @@ class ClientsState extends State<ClientsWidget> {
                   new IconButton(
                     icon: new Icon(Icons.remove_red_eye),
                     color: Colors.blueAccent,
-                    onPressed: (){view(clientList[index]);},
+                    onPressed: () {
+                      view(clientList[index]);
+                    },
                   )
                 ],
               ));
