@@ -29,8 +29,8 @@ class ViewClientState extends State<ViewClientWidget> {
   ViewClientState(this.name);
 
   // client details
-  Client client =
-      new Client("nip", 0, 0, "deviceName", 0, 0.0, true, false, false, 0, 0.0);
+  Client client = new Client("nip", 0, 0, "deviceName", 0, 0.0, true, false,
+      false, 0, 0.0, new DateTime.now().toIso8601String());
 
   // JSON data
   File jsonFile;
@@ -223,7 +223,7 @@ class ViewClientState extends State<ViewClientWidget> {
                   new Row(
                     children: <Widget>[
                       new Text(
-                        "01.02.18: ",
+                        dateToString(DateTime.parse(client.beginDate)),
                         style: new TextStyle(fontWeight: FontWeight.bold),
                       ),
                       new Padding(padding: new EdgeInsets.only(left: 5.0)),
@@ -276,5 +276,14 @@ class ViewClientState extends State<ViewClientWidget> {
             )
           ],
         ));
+  }
+
+  String dateToString(DateTime date) {
+    String readable = date.day.toString() +
+        "." +
+        date.month.toString() +
+        "." +
+        date.year.toString() + ":";
+    return readable;
   }
 }

@@ -111,6 +111,7 @@ class NewClientState extends State<NewClientWidget> {
           printerLease,
           int.tryParse(colorFreeCopies.text) ?? 0,
           double.tryParse(colorPagePrice.text) ?? 0.0,
+          DateTime.now().toIso8601String(),
         );
         tomek.display();
         print("client has been created");

@@ -10,8 +10,9 @@ class Client {
   // --- > updated
   var colorFreeCopies = 0; // liczba darmowych kolorowych kopii
   var colorPagePrice = 0.0; // cena za kopie kolorowa
-  List<Appointment> appointments; // spotkania, rozliczenia
+  Appointments appointments; // spotkania, rozliczenia
   Tasks tasks; // lista zadan
+  String beginDate;
 
   // boxes
   var quaterRate = false; // rozliczenie kwartalne (false -> miesieczne)
@@ -29,7 +30,8 @@ class Client {
       this.tonerIncluded,
       this.printerLease,
       this.colorFreeCopies,
-      this.colorPagePrice);
+      this.colorPagePrice,
+      this.beginDate);
 
   // debug
   void display() {
@@ -59,7 +61,8 @@ class Client {
       tonerIncluded = json['tonerIncluded'],
       printerLease = json['printerLease'],
       colorFreeCopies = json['colorFreeCopies'],
-      colorPagePrice = json['colorPagePrice'];
+      colorPagePrice = json['colorPagePrice'],
+      beginDate = json['beginDate'];
 
   Map<String, dynamic> toJson() => {
         'nip': nip,
@@ -72,16 +75,21 @@ class Client {
         'tonerIncluded': tonerIncluded,
         'printerLease': printerLease,
         'colorFreeCopies': colorFreeCopies,
-        'colorPagePrice': colorPagePrice
+        'colorPagePrice': colorPagePrice,
+        'beginDate': beginDate
       };
 }
 
-class Appointment {
-  DateTime date;
-  DateTime nextDate;
-  var numbOfCopies;
+class Appointments {
+  List<String> date;
+  List<String> nextDate;
+  List<int> numbOfCopies;
 
-  Appointment(this.date, this.nextDate, this.numbOfCopies);
+  void add(String date, String nextDate, int numbOfCopies){
+    this.date.add(date);
+    this.nextDate.add(nextDate);
+    this.numbOfCopies.add(numbOfCopies);
+  }
 }
 
 class Tasks {
