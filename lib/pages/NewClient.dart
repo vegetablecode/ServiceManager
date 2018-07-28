@@ -27,6 +27,8 @@ class NewClientState extends State<NewClientWidget> {
   TextEditingController deviceName = new TextEditingController();
   TextEditingController freeCopies = new TextEditingController();
   TextEditingController pagePrice = new TextEditingController();
+  TextEditingController colorFreeCopies = new TextEditingController();
+  TextEditingController colorPagePrice = new TextEditingController();
 
   // JSON data
   File jsonFile;
@@ -48,11 +50,28 @@ class NewClientState extends State<NewClientWidget> {
       dir = directory;
       jsonFile = new File(dir.path + "/" + fileName);
       fileExist = jsonFile.existsSync();
-      if(fileExist) this.setState(() => fileContent = JSON.decode(jsonFile.readAsStringSync()));
+      if ((fileExist)&&(this.mounted))
+        this.setState(
+            () => fileContent = JSON.decode(jsonFile.readAsStringSync()));
     });
   }
 
-  void createFile(Map<String, dynamic> content, Directory dir, String fileName) {
+  @override
+  void dispose() {
+    name.dispose();
+    nip.dispose();
+    contractPer.dispose();
+    rate.dispose();
+    deviceName.dispose();
+    freeCopies.dispose();
+    pagePrice.dispose();
+    colorFreeCopies.dispose();
+    colorPagePrice.dispose();
+    super.dispose();
+  }
+
+  void createFile(
+      Map<String, dynamic> content, Directory dir, String fileName) {
     print("Creating file!");
     File file = new File(dir.path + "/" + fileName);
     file.createSync();
@@ -62,9 +81,10 @@ class NewClientState extends State<NewClientWidget> {
 
   void writeToFile(Map<String, dynamic> content) {
     print("Writing to file!");
-    if(fileExist) {
+    if (fileExist) {
       print("File exist!");
-      Map<String, dynamic> jsonFileContent = json.decode(jsonFile.readAsStringSync());
+      Map<String, dynamic> jsonFileContent =
+          json.decode(jsonFile.readAsStringSync());
       jsonFileContent.addAll(content);
       jsonFile.writeAsStringSync(JSON.encode(jsonFileContent));
     } else {
@@ -76,39 +96,58 @@ class NewClientState extends State<NewClientWidget> {
 
   // switches & buttons
   void onPressed() {
-    setState(() {
-      // create a new client
-      Client tomek = Client(nip.text, int.tryParse(contractPer.text)??0, int.tryParse(rate.text)??0, deviceName.text, int.tryParse(freeCopies.text)??0, double.tryParse(pagePrice.text)??0.0, quaterRate, tonerIncluded, printerLease);
-      tomek.display();
-      print("client has been created");
-      
-      // json test #temp
-      Map<String, dynamic> userMap = {name.text: tomek.toJson()};
-      var user = new Client.fromJson(userMap);
-      print(user.deviceName);
-      String jsonFile = json.encode(user);
+    if (this.mounted) {
+      setState(() {
+        // create a new client
+        Client tomek = Client(
+            nip.text,
+            int.tryParse(contractPer.text) ?? 0,
+            int.tryParse(rate.text) ?? 0,
+            deviceName.text,
+            int.tryParse(freeCopies.text) ?? 0,
+            double.tryParse(pagePrice.text) ?? 0.0,
+            quaterRate,
+            tonerIncluded,
+            printerLease,
+            int.tryParse(colorFreeCopies.text) ?? 0,
+            double.tryParse(colorPagePrice.text) ?? 0.0,);
+        tomek.display();
+        print("client has been created");
 
-      // save to the db
-      writeToFile(userMap);
-    });
+        // json test #temp
+        Map<String, dynamic> userMap = {name.text: tomek.toJson()};
+        var user = new Client.fromJson(userMap);
+        print(user.deviceName);
+        String jsonFile = json.encode(user);
+
+        // save to the db
+        writeToFile(userMap);
+      });
+    }
   }
 
   void quaterRateChanged(bool value) {
-    setState(() {
-      quaterRate = value;
-    });
+    if (this.mounted) {
+      setState(() {
+        quaterRate = value;
+      });
+    }
   }
 
   void tonerIncludedChanged(bool value) {
-    setState(() {
-      tonerIncluded = value;
-    });
+    if (this.mounted) {
+      setState(() {
+        tonerIncluded = value;
+      });
+    }
   }
 
   void printerLeaseChanged(bool value) {
-    setState(() {
-      printerLease = value;
-    });
+    if (this.mounted) {
+      setState(() {
+        printerLease = value;
+      });
+    }
   }
 
   @override
@@ -124,30 +163,20 @@ class NewClientState extends State<NewClientWidget> {
           style: new TextStyle(fontSize: 20.0),
         ),
         new MyCard(
-          label: "Nazwa klienta: ",
-          controller: name,
-          type: TextInputType.text
-        ),
+            label: "Nazwa klienta: ",
+            controller: name,
+            type: TextInputType.text),
         new MyCard(
-          label: "NIP klienta: ",
-          controller: nip,
-          type: TextInputType.text
-        ),
+            label: "NIP klienta: ", controller: nip, type: TextInputType.text),
         new MyCard(
           label: "Okres umowy (w miesiącach): ",
           controller: contractPer,
-          type: TextInputType.numberWithOptions(
-            signed: false,
-            decimal: false
-          ),
+          type: TextInputType.numberWithOptions(signed: false, decimal: false),
         ),
         new MyCard(
           label: "Ryczałt (zł): ",
           controller: rate,
-          type: TextInputType.numberWithOptions(
-            signed: false,
-            decimal: false
-          ),
+          type: TextInputType.numberWithOptions(signed: false, decimal: false),
         ),
         new Padding(padding: new EdgeInsets.only(bottom: 20.0)),
         new Text(
@@ -161,20 +190,24 @@ class NewClientState extends State<NewClientWidget> {
           type: TextInputType.text,
         ),
         new MyCard(
-          label: "Liczba darmowych kopii: ",
+          label: "Liczba darmowych kopii (czb): ",
           controller: freeCopies,
-          type: TextInputType.numberWithOptions(
-            signed: false,
-            decimal: false
-          ),
+          type: TextInputType.numberWithOptions(signed: false, decimal: false),
         ),
         new MyCard(
-          label: "Cena za stronę (zł): ",
+          label: "Cena za stronę (zł) (czb): ",
           controller: pagePrice,
-          type: TextInputType.numberWithOptions(
-            signed: false,
-            decimal: true
-          ),
+          type: TextInputType.numberWithOptions(signed: false, decimal: true),
+        ),
+        new MyCard(
+          label: "Liczba darmowych kopii (kolor): ",
+          controller: colorFreeCopies,
+          type: TextInputType.numberWithOptions(signed: false, decimal: false),
+        ),
+        new MyCard(
+          label: "Cena za stronę (zł) (kolor): ",
+          controller: colorPagePrice,
+          type: TextInputType.numberWithOptions(signed: false, decimal: true),
         ),
         new Padding(padding: new EdgeInsets.only(bottom: 20.0)),
         new Text(

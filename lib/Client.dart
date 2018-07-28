@@ -7,6 +7,11 @@ class Client {
   var deviceName = ""; // nazwa urzadzenia
   var freeCopies = 0; // liczba darmowych kopii
   var pagePrice = 0.0; // cena za kopie
+  // --- > updated
+  var colorFreeCopies = 0; // liczba darmowych kolorowych kopii
+  var colorPagePrice = 0.0; // cena za kopie kolorowa
+  List<Appointment> appointments; // spotkania, rozliczenia
+  Tasks tasks; // lista zadan
 
   // boxes
   var quaterRate = false; // rozliczenie kwartalne (false -> miesieczne)
@@ -22,7 +27,9 @@ class Client {
       this.pagePrice,
       this.quaterRate,
       this.tonerIncluded,
-      this.printerLease);
+      this.printerLease,
+      this.colorFreeCopies,
+      this.colorPagePrice);
 
   // debug
   void display() {
@@ -36,6 +43,9 @@ class Client {
     print(quaterRate);
     print(tonerIncluded);
     print(printerLease);
+    print(colorFreeCopies);
+    print(colorPagePrice);
+    print("---");
   }
 
   Client.fromJson(Map<String, dynamic> json)
@@ -47,7 +57,9 @@ class Client {
       pagePrice = json['pagePrice'],
       quaterRate = json['quaterRate'],
       tonerIncluded = json['tonerIncluded'],
-      printerLease = json['printerLease'];
+      printerLease = json['printerLease'],
+      colorFreeCopies = json['colorFreeCopies'],
+      colorPagePrice = json['colorPageCopies'];
 
   Map<String, dynamic> toJson() => {
         'nip': nip,
@@ -58,6 +70,28 @@ class Client {
         'pagePrice': pagePrice,
         'quaterRate': quaterRate,
         'tonerIncluded': tonerIncluded,
-        'printerLease': printerLease
+        'printerLease': printerLease,
+        'colorFreeCopies': colorFreeCopies,
+        'colorPagePrice': colorPagePrice
       };
+}
+
+class Appointment {
+  DateTime date;
+  DateTime nextDate;
+  var numbOfCopies;
+
+  Appointment(this.date, this.nextDate, this.numbOfCopies);
+}
+
+class Tasks {
+  List<String> taskList;
+
+  void add(String task) {
+    taskList.add(task);
+  }
+
+  void remove(int index) {
+    taskList.removeAt(index);
+  }
 }

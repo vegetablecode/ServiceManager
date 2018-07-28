@@ -35,7 +35,7 @@ class ClientsState extends State<ClientsWidget> {
       dir = directory;
       jsonFile = new File(dir.path + "/" + fileName);
       fileExist = jsonFile.existsSync();
-      if (fileExist){
+      if ((fileExist)&&(this.mounted)) {
         this.setState(
             () => fileContent = JSON.decode(jsonFile.readAsStringSync()));
         clientList = fileContent.keys.toList();
@@ -44,13 +44,15 @@ class ClientsState extends State<ClientsWidget> {
   }
 
   void view(String name) {
-    setState(() {
-      print(name);
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => viewClient.ViewClient(name)),
-      );
-    });
+    if (this.mounted) {
+      setState(() {
+        print(name);
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => viewClient.ViewClient(name)),
+        );
+      });
+    }
   }
 
   @override
