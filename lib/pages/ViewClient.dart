@@ -28,9 +28,8 @@ class ViewClientState extends State<ViewClientWidget> {
   String name;
   ViewClientState(this.name);
 
-  // client details
-  Client client = new Client("nip", 0, 0, "deviceName", 0, 0.0, true, false,
-      false, 0, 0.0, new DateTime.now().toIso8601String());
+  Client client;
+
 
   // JSON data
   File jsonFile;
@@ -44,6 +43,10 @@ class ViewClientState extends State<ViewClientWidget> {
   @override
   void initState() {
     super.initState();
+
+    // client details
+    client = new Client("nip", 0, 0, "deviceName", 0, 0.0, true, false,
+        false, 0, 0.0, new DateTime.now().toIso8601String());
     getApplicationDocumentsDirectory().then((Directory directory) {
       dir = directory;
       jsonFile = new File(dir.path + "/" + fileName);
@@ -283,7 +286,8 @@ class ViewClientState extends State<ViewClientWidget> {
         "." +
         date.month.toString() +
         "." +
-        date.year.toString() + ":";
+        date.year.toString() +
+        ":";
     return readable;
   }
 }

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 class Client {
   // fields
   var name = ""; // nazwa klienta
@@ -10,8 +12,8 @@ class Client {
   // --- > updated
   var colorFreeCopies = 0; // liczba darmowych kolorowych kopii
   var colorPagePrice = 0.0; // cena za kopie kolorowa
-  Appointments appointments; // spotkania, rozliczenia
-  Tasks tasks; // lista zadan
+  //List<Appointment> appointments; // spotkania, rozliczenia
+  //List<String> tasks = null; // lista zadan
   String beginDate;
 
   // boxes
@@ -51,18 +53,18 @@ class Client {
   }
 
   Client.fromJson(Map<String, dynamic> json)
-    : nip = json['nip'],
-      contractPer = json['contractPer'],
-      rate = json['rate'],
-      deviceName = json['deviceName'],
-      freeCopies = json['freeCopies'],
-      pagePrice = json['pagePrice'],
-      quaterRate = json['quaterRate'],
-      tonerIncluded = json['tonerIncluded'],
-      printerLease = json['printerLease'],
-      colorFreeCopies = json['colorFreeCopies'],
-      colorPagePrice = json['colorPagePrice'],
-      beginDate = json['beginDate'];
+      : nip = json['nip'],
+        contractPer = json['contractPer'],
+        rate = json['rate'],
+        deviceName = json['deviceName'],
+        freeCopies = json['freeCopies'],
+        pagePrice = json['pagePrice'],
+        quaterRate = json['quaterRate'],
+        tonerIncluded = json['tonerIncluded'],
+        printerLease = json['printerLease'],
+        colorFreeCopies = json['colorFreeCopies'],
+        colorPagePrice = json['colorPagePrice'],
+        beginDate = json['beginDate'];
 
   Map<String, dynamic> toJson() => {
         'nip': nip,
@@ -80,26 +82,15 @@ class Client {
       };
 }
 
-class Appointments {
-  List<String> date;
-  List<String> nextDate;
-  List<int> numbOfCopies;
+class Appointment {
+  final String date;
+  final String nextDate;
+  final int numbOfCopies;
 
-  void add(String date, String nextDate, int numbOfCopies){
-    this.date.add(date);
-    this.nextDate.add(nextDate);
-    this.numbOfCopies.add(numbOfCopies);
-  }
-}
+  const Appointment(this.date, this.nextDate, this.numbOfCopies);
 
-class Tasks {
-  List<String> taskList;
-
-  void add(String task) {
-    taskList.add(task);
-  }
-
-  void remove(int index) {
-    taskList.removeAt(index);
-  }
+  Appointment.fromJson(Map<String, dynamic> json)
+      : date = json['date'],
+        nextDate = json['nextDate'],
+        numbOfCopies = json['numbOfCopies'];
 }
