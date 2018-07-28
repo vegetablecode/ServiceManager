@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:elbiserwis/Client.dart';
 import 'dart:io';
 import 'dart:convert';
+import 'dart:async';
 import 'package:path_provider/path_provider.dart';
 
 class NewClient extends StatelessWidget {
@@ -29,6 +30,8 @@ class NewClientState extends State<NewClientWidget> {
   TextEditingController pagePrice = new TextEditingController();
   TextEditingController colorFreeCopies = new TextEditingController();
   TextEditingController colorPagePrice = new TextEditingController();
+  DateTime _beginDate = new DateTime.now();
+  String tasks = "";
 
   // JSON data
   File jsonFile;
@@ -111,7 +114,10 @@ class NewClientState extends State<NewClientWidget> {
             printerLease,
             int.tryParse(colorFreeCopies.text) ?? 0,
             double.tryParse(colorPagePrice.text) ?? 0.0,
-            DateTime.now().toIso8601String());
+            _beginDate.toIso8601String(),
+            "",
+            "",
+            tasks);
         tomek.display();
         print("client has been created");
 
@@ -149,6 +155,31 @@ class NewClientState extends State<NewClientWidget> {
         printerLease = value;
       });
     }
+  }
+
+  Future<Null> _selectDate(BuildContext context) async {
+    final DateTime picked = await showDatePicker(
+        context: context,
+        initialDate: _beginDate,
+        firstDate: new DateTime(2018),
+        lastDate: new DateTime(2019));
+    if (picked != null && picked != _beginDate) {
+      print("Date seleted: ${_beginDate.toString()}");
+      if (this.mounted) {
+        setState(() {
+          _beginDate = picked;
+        });
+      }
+    }
+  }
+
+  String dateToString(DateTime date) {
+    String readable = date.day.toString() +
+        "." +
+        date.month.toString() +
+        "." +
+        date.year.toString();
+    return readable;
   }
 
   @override
@@ -209,6 +240,28 @@ class NewClientState extends State<NewClientWidget> {
           label: "Cena za stronę (zł) (kolor): ",
           controller: colorPagePrice,
           type: TextInputType.numberWithOptions(signed: false, decimal: true),
+        ),
+        new Padding(padding: new EdgeInsets.only(bottom: 20.0)),
+        new Text(
+          "Data początku umowy",
+          textAlign: TextAlign.center,
+          style: new TextStyle(fontSize: 20.0),
+        ),
+        new Padding(padding: new EdgeInsets.only(bottom: 20.0)),
+        new Row(
+          children: <Widget>[
+            new Text("Wybrana data: "),
+            new Padding(padding: new EdgeInsets.only(left: 5.0)),
+            new Text("${dateToString(_beginDate)}",
+                style: new TextStyle(fontWeight: FontWeight.bold)),
+          ],
+        ),
+        new Padding(padding: new EdgeInsets.only(bottom: 5.0)),
+        new FlatButton(
+          child: new Text("Wybierz inną datę!", style: TextStyle(color: Colors.blueAccent),),
+          onPressed: () {
+            _selectDate(context);
+          },
         ),
         new Padding(padding: new EdgeInsets.only(bottom: 20.0)),
         new Text(

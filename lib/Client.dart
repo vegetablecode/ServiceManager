@@ -1,7 +1,7 @@
 import 'dart:async';
 
 class Client {
-  // fields
+  // client details
   var name = ""; // nazwa klienta
   var nip = ""; // nip klienta
   var contractPer = 0; // okres umowy
@@ -12,9 +12,11 @@ class Client {
   // --- > updated
   var colorFreeCopies = 0; // liczba darmowych kolorowych kopii
   var colorPagePrice = 0.0; // cena za kopie kolorowa
-  //List<Appointment> appointments; // spotkania, rozliczenia
-  //List<String> tasks = null; // lista zadan
-  String beginDate;
+
+  String beginDate = ""; // data poczatku umowy
+  String lastDate = ""; // ostatni termin wizyty
+  String nextDate = ""; // nastepny termin wizyty
+  String tasks = ""; // notatki, zadania
 
   // boxes
   var quaterRate = false; // rozliczenie kwartalne (false -> miesieczne)
@@ -33,7 +35,45 @@ class Client {
       this.printerLease,
       this.colorFreeCopies,
       this.colorPagePrice,
-      this.beginDate);
+      this.beginDate,
+      this.lastDate,
+      this.nextDate,
+      this.tasks);
+
+  Client.fromJson(Map<String, dynamic> json)
+      : nip = json['nip'],
+        contractPer = json['contractPer'],
+        rate = json['rate'],
+        deviceName = json['deviceName'],
+        freeCopies = json['freeCopies'],
+        pagePrice = json['pagePrice'],
+        quaterRate = json['quaterRate'],
+        tonerIncluded = json['tonerIncluded'],
+        printerLease = json['printerLease'],
+        colorFreeCopies = json['colorFreeCopies'],
+        colorPagePrice = json['colorPagePrice'],
+        beginDate = json['beginDate'],
+        lastDate = json['lastDate'],
+        nextDate = json['nextDate'],
+        tasks = json['tasks'];
+
+  Map<String, dynamic> toJson() => {
+        'nip': nip,
+        'contractPer': contractPer,
+        'rate': rate,
+        'deviceName': deviceName,
+        'freeCopies': freeCopies,
+        'pagePrice': pagePrice,
+        'quaterRate': quaterRate,
+        'tonerIncluded': tonerIncluded,
+        'printerLease': printerLease,
+        'colorFreeCopies': colorFreeCopies,
+        'colorPagePrice': colorPagePrice,
+        'beginDate': beginDate,
+        'lastDate': lastDate,
+        'nextDate': nextDate,
+        'tasks': tasks
+      };
 
   // debug
   void display() {
@@ -51,46 +91,4 @@ class Client {
     print(colorPagePrice);
     print("---");
   }
-
-  Client.fromJson(Map<String, dynamic> json)
-      : nip = json['nip'],
-        contractPer = json['contractPer'],
-        rate = json['rate'],
-        deviceName = json['deviceName'],
-        freeCopies = json['freeCopies'],
-        pagePrice = json['pagePrice'],
-        quaterRate = json['quaterRate'],
-        tonerIncluded = json['tonerIncluded'],
-        printerLease = json['printerLease'],
-        colorFreeCopies = json['colorFreeCopies'],
-        colorPagePrice = json['colorPagePrice'],
-        beginDate = json['beginDate'];
-
-  Map<String, dynamic> toJson() => {
-        'nip': nip,
-        'contractPer': contractPer,
-        'rate': rate,
-        'deviceName': deviceName,
-        'freeCopies': freeCopies,
-        'pagePrice': pagePrice,
-        'quaterRate': quaterRate,
-        'tonerIncluded': tonerIncluded,
-        'printerLease': printerLease,
-        'colorFreeCopies': colorFreeCopies,
-        'colorPagePrice': colorPagePrice,
-        'beginDate': beginDate
-      };
-}
-
-class Appointment {
-  final String date;
-  final String nextDate;
-  final int numbOfCopies;
-
-  const Appointment(this.date, this.nextDate, this.numbOfCopies);
-
-  Appointment.fromJson(Map<String, dynamic> json)
-      : date = json['date'],
-        nextDate = json['nextDate'],
-        numbOfCopies = json['numbOfCopies'];
 }
