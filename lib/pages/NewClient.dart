@@ -50,7 +50,7 @@ class NewClientState extends State<NewClientWidget> {
       dir = directory;
       jsonFile = new File(dir.path + "/" + fileName);
       fileExist = jsonFile.existsSync();
-      if ((fileExist)&&(this.mounted))
+      if ((fileExist) && (this.mounted))
         this.setState(
             () => fileContent = JSON.decode(jsonFile.readAsStringSync()));
     });
@@ -100,17 +100,18 @@ class NewClientState extends State<NewClientWidget> {
       setState(() {
         // create a new client
         Client tomek = Client(
-            nip.text,
-            int.tryParse(contractPer.text) ?? 0,
-            int.tryParse(rate.text) ?? 0,
-            deviceName.text,
-            int.tryParse(freeCopies.text) ?? 0,
-            double.tryParse(pagePrice.text) ?? 0.0,
-            quaterRate,
-            tonerIncluded,
-            printerLease,
-            int.tryParse(colorFreeCopies.text) ?? 0,
-            double.tryParse(colorPagePrice.text) ?? 0.0,);
+          nip.text,
+          int.tryParse(contractPer.text) ?? 0,
+          int.tryParse(rate.text) ?? 0,
+          deviceName.text,
+          int.tryParse(freeCopies.text) ?? 0,
+          double.tryParse(pagePrice.text) ?? 0.0,
+          quaterRate,
+          tonerIncluded,
+          printerLease,
+          int.tryParse(colorFreeCopies.text) ?? 0,
+          double.tryParse(colorPagePrice.text) ?? 0.0,
+        );
         tomek.display();
         print("client has been created");
 

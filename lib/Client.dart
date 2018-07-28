@@ -59,7 +59,7 @@ class Client {
       tonerIncluded = json['tonerIncluded'],
       printerLease = json['printerLease'],
       colorFreeCopies = json['colorFreeCopies'],
-      colorPagePrice = json['colorPageCopies'];
+      colorPagePrice = json['colorPagePrice'];
 
   Map<String, dynamic> toJson() => {
         'nip': nip,
