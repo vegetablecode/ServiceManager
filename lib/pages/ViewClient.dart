@@ -1,6 +1,7 @@
 import 'package:elbiserwis/Client.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:elbiserwis/styles/MyColors.dart';
 import 'dart:io';
 import 'dart:async';
 import 'dart:convert';
@@ -168,9 +169,10 @@ class ViewClientState extends State<ViewClientWidget> {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
+      backgroundColor: MyColors.background,
         appBar: new AppBar(
           title: new Text("Zobacz klienta"),
-          backgroundColor: Colors.green,
+          backgroundColor: MyColors.tabBar2,
         ),
         body: ListView(
           padding: const EdgeInsets.all(5.0),
@@ -444,7 +446,7 @@ class ViewClientState extends State<ViewClientWidget> {
                       new FlatButton(
                         child: new Text(
                           "Wybierz inną datę!",
-                          style: TextStyle(color: Colors.blueAccent),
+                          style: TextStyle(color: MyColors.flatButton),
                         ),
                         onPressed: () {
                           _selectDate(context);
@@ -456,7 +458,7 @@ class ViewClientState extends State<ViewClientWidget> {
                   new FlatButton(
                     child: new Text(
                       "Dodaj notatkę!",
-                      style: TextStyle(color: Colors.blueAccent),
+                      style: TextStyle(color: MyColors.flatButton),
                     ),
                     onPressed: addNote,
                   ),
@@ -486,7 +488,7 @@ class ViewClientState extends State<ViewClientWidget> {
                     itemBuilder: (context, index) {
                       return new Card(
                         margin: new EdgeInsets.all(5.0),
-                        color: Colors.redAccent,
+                        color: MyColors.task,
                         child: new Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
@@ -521,7 +523,7 @@ class ViewClientState extends State<ViewClientWidget> {
                   new FlatButton(
                     child: new Text(
                       "Dodaj zadanie!",
-                      style: TextStyle(color: Colors.blueAccent),
+                      style: TextStyle(color: MyColors.flatButton),
                     ),
                     onPressed: addTask,
                   ),
@@ -533,7 +535,7 @@ class ViewClientState extends State<ViewClientWidget> {
                 new Padding(padding: new EdgeInsets.only(bottom: 5.0)),
                 new RaisedButton(
                   child: new Text("Dodaj stan licznika"),
-                  color: Colors.blueAccent,
+                  color: MyColors.flatButtonFill,
                   onPressed: editClient,
                 ),
                 new Padding(padding: new EdgeInsets.only(bottom: 5.0)),

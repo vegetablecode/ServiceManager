@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import './styles/MyColors.dart';
 import './pages/Home.dart' as home;
 import './pages/Clients.dart' as clients;
 import './pages/NewClient.dart' as newclient;
@@ -51,12 +52,13 @@ class MainPageState extends State<MainPage>
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
+      backgroundColor: MyColors.background,
       appBar: new AppBar(
         title: new Text(myHandler.title),
-        backgroundColor: Colors.deepOrangeAccent,
+        backgroundColor: MyColors.tabBar,
       ),
       bottomNavigationBar: new Material(
-          color: Colors.deepOrangeAccent,
+          color: MyColors.iconBar,
           child: new TabBar(controller: controller, tabs: <Tab>[
             new Tab(icon: new Icon(Icons.home)),
             new Tab(icon: new Icon(Icons.people)),

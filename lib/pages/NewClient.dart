@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:elbiserwis/Client.dart';
+import 'package:elbiserwis/styles/MyColors.dart';
 import 'dart:io';
 import 'dart:convert';
 import 'dart:async';
@@ -260,7 +261,7 @@ class NewClientState extends State<NewClientWidget> {
         ),
         new Padding(padding: new EdgeInsets.only(bottom: 5.0)),
         new FlatButton(
-          child: new Text("Wybierz inną datę!", style: TextStyle(color: Colors.blueAccent),),
+          child: new Text("Wybierz inną datę!", style: TextStyle(color: MyColors.flatButton),),
           onPressed: () {
             _selectDate(context);
           },
@@ -327,7 +328,7 @@ class NewClientState extends State<NewClientWidget> {
         ),
         new RaisedButton(
           child: new Text("Dodaj!"),
-          color: Colors.blueAccent,
+          color: MyColors.flatButtonFill,
           onPressed: onPressed,
         )
       ],

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:io';
 import 'dart:convert';
 import 'package:path_provider/path_provider.dart';
+import 'package:elbiserwis/styles/MyColors.dart';
 import './ViewClient.dart' as viewClient;
 
 class Clients extends StatelessWidget {
@@ -58,6 +59,7 @@ class ClientsState extends State<ClientsWidget> {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
+      backgroundColor: MyColors.background,
         body: new ListView.builder(
             itemCount: fileContent == null ? 0 : fileContent.length,
             itemBuilder: (BuildContext context, int index) {
