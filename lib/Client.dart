@@ -16,7 +16,8 @@ class Client {
   String beginDate = ""; // data poczatku umowy
   String lastDate = ""; // ostatni termin wizyty
   String nextDate = ""; // nastepny termin wizyty
-  String tasks = ""; // notatki, zadania
+  String notes = ""; // notatki, zadania
+  String tasks = ""; // zadania
 
   // boxes
   var quaterRate = false; // rozliczenie kwartalne (false -> miesieczne)
@@ -38,6 +39,7 @@ class Client {
       this.beginDate,
       this.lastDate,
       this.nextDate,
+      this.notes,
       this.tasks);
 
   Client.fromJson(Map<String, dynamic> json)
@@ -55,6 +57,7 @@ class Client {
         beginDate = json['beginDate'],
         lastDate = json['lastDate'],
         nextDate = json['nextDate'],
+        notes = json['notes'],
         tasks = json['tasks'];
 
   Map<String, dynamic> toJson() => {
@@ -72,6 +75,7 @@ class Client {
         'beginDate': beginDate,
         'lastDate': lastDate,
         'nextDate': nextDate,
+        'notes': notes,
         'tasks': tasks
       };
 

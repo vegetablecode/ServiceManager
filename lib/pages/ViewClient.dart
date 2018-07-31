@@ -30,6 +30,8 @@ class ViewClientState extends State<ViewClientWidget> {
   ViewClientState(this.name);
 
   TextEditingController note = new TextEditingController();
+  TextEditingController counterStatus = new TextEditingController();
+  TextEditingController task = new TextEditingController();
   DateTime _appointmentDate = new DateTime.now();
 
   Client client;
@@ -49,7 +51,7 @@ class ViewClientState extends State<ViewClientWidget> {
 
     // client details
     client = new Client("", 0, 0, "", 0, 0.0, true, false, false, 0, 0.0,
-        DateTime.now().toIso8601String(), "", "", "");
+        DateTime.now().toIso8601String(), "", "", "", null);
     getApplicationDocumentsDirectory().then((Directory directory) {
       dir = directory;
       jsonFile = new File(dir.path + "/" + fileName);
@@ -106,18 +108,40 @@ class ViewClientState extends State<ViewClientWidget> {
     print("tu sie bedzie edytowac");
   }
 
+  void removeTaskAction(int index) {
+    client.tasks = removeTask(client.tasks, getTaskList(client.tasks), index);
+    updateClient();
+  }
+
+  void addTask() {
+    if (this.mounted) {
+      setState(() {
+        client.tasks += task.text.toString();
+        client.tasks += '\n';
+        print("the task has been added!");
+        updateClient();
+      });
+    }
+  }
+
   void addNote() {
     if (this.mounted) {
       setState(() {
-        DateTime date = DateTime.now();
-        client.tasks += dateToString(date);
-        client.tasks += ": ";
-        client.tasks += note.text.toString();
-        client.tasks += '\n';
-        print("note has been added!");
+        client.notes += dateToString(_appointmentDate);
+        client.notes += ": ";
+        client.notes += note.text.toString();
+        client.notes += " (licznik: ";
+        client.notes += counterStatus.text.toString();
+        client.notes += ")";
+        client.notes += '\n';
+        print("the note has been added!");
       });
     }
 
+    updateClient();
+  }
+
+  void updateClient() {
     // update client details
     Client updatedClient = Client(
         client.nip,
@@ -134,6 +158,7 @@ class ViewClientState extends State<ViewClientWidget> {
         client.beginDate,
         "",
         "",
+        client.notes,
         client.tasks);
 
     Map<String, dynamic> updatedMap = {name: updatedClient.toJson()};
@@ -307,7 +332,7 @@ class ViewClientState extends State<ViewClientWidget> {
                             ),
                             new Padding(
                                 padding: new EdgeInsets.only(left: 5.0)),
-                            new Text(client.quaterRate ? "tak" : "nie"),
+                            new Text(client.printerLease ? "tak" : "nie"),
                           ],
                         ),
                       ],
@@ -395,7 +420,7 @@ class ViewClientState extends State<ViewClientWidget> {
                   ),
                   new Padding(padding: new EdgeInsets.only(bottom: 20.0)),
                   new Row(
-                    children: <Widget>[new Text(client.tasks.toString())],
+                    children: <Widget>[new Text(client.notes.toString())],
                   ),
                   new TextField(
                     decoration: InputDecoration(hintText: 'Dodaj notatkę...'),
@@ -405,7 +430,9 @@ class ViewClientState extends State<ViewClientWidget> {
                   new TextField(
                     decoration:
                         InputDecoration(hintText: 'Dodaj stan licznika...'),
-                    controller: note,
+                    controller: counterStatus,
+                    keyboardType: TextInputType.numberWithOptions(
+                        signed: false, decimal: false),
                   ),
                   new Padding(padding: new EdgeInsets.only(bottom: 20.0)),
                   new Row(
@@ -437,15 +464,70 @@ class ViewClientState extends State<ViewClientWidget> {
               ),
             )),
             new Card(
+              child: new Container(
+                padding: new EdgeInsets.all(5.0),
+                child: new Column(
+                  children: <Widget>[
+                    new Text(
+                      "Zadania",
+                      style: new TextStyle(fontSize: 20.0),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            new Container(
+                height: 200.0,
+                child: new Card(
+                  child: ListView.builder(
+                    itemCount: client.tasks == null
+                        ? 0
+                        : getTaskList(client.tasks).length,
+                    itemBuilder: (context, index) {
+                      return new Card(
+                        margin: new EdgeInsets.all(5.0),
+                        color: Colors.redAccent,
+                        child: new Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            new Row(
+                              children: <Widget>[
+                                new Padding(
+                                    padding: new EdgeInsets.only(left: 5.0)),
+                                new Text(getTaskList(client.tasks)[index]),
+                              ],
+                            ),
+                            new IconButton(
+                              icon: new Icon(Icons.delete),
+                              onPressed: () {removeTaskAction(index);},
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  ),
+                )),
+            new Card(
+                child: new Container(
+              padding: new EdgeInsets.all(5.0),
               child: new Column(
                 children: <Widget>[
-                  new Text(
-                    "Do zrobienia",
-                    style: new TextStyle(fontSize: 20.0),
+                  new Padding(padding: new EdgeInsets.only(bottom: 20.0)),
+                  new TextField(
+                    decoration: InputDecoration(hintText: 'Dodaj zadanie...'),
+                    controller: task,
+                  ),
+                  new Padding(padding: new EdgeInsets.only(bottom: 5.0)),
+                  new FlatButton(
+                    child: new Text(
+                      "Dodaj zadanie!",
+                      style: TextStyle(color: Colors.blueAccent),
+                    ),
+                    onPressed: addTask,
                   ),
                 ],
               ),
-            ),
+            )),
             new Column(
               children: <Widget>[
                 new Padding(padding: new EdgeInsets.only(bottom: 5.0)),
@@ -478,4 +560,28 @@ class ViewClientState extends State<ViewClientWidget> {
         date.year.toString();
     return readable;
   }
+
+  List<String> getTaskList(String tasks) {
+    int lastBreak = 0;
+    List<String> taskList = new List();
+    for (int i = 0; i < tasks.length; i++) {
+      if (tasks[i] == '\n') {
+        taskList.add(tasks.substring(lastBreak, i));
+        lastBreak = i + 1;
+      }
+    }
+    return taskList;
+  }
+
+  String removeTask(String tasks, List<String> taskList, int index) {
+    String newTasks = "";
+    for (int i = 0; i < taskList.length; i++) {
+      if (i != index) {
+        newTasks += taskList[i];
+        newTasks += '\n';
+      }
+    }
+    return newTasks;
+  }
+
 }

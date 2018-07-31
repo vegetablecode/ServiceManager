@@ -31,6 +31,7 @@ class NewClientState extends State<NewClientWidget> {
   TextEditingController colorFreeCopies = new TextEditingController();
   TextEditingController colorPagePrice = new TextEditingController();
   DateTime _beginDate = new DateTime.now();
+  String notes = "";
   String tasks = "";
 
   // JSON data
@@ -117,6 +118,7 @@ class NewClientState extends State<NewClientWidget> {
             _beginDate.toIso8601String(),
             "",
             "",
+            notes,
             tasks);
         tomek.display();
         print("client has been created");
