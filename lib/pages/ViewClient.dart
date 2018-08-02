@@ -32,6 +32,7 @@ class ViewClientState extends State<ViewClientWidget> {
 
   TextEditingController note = new TextEditingController();
   TextEditingController counterStatus = new TextEditingController();
+  TextEditingController colorCounterStatus = new TextEditingController();
   TextEditingController task = new TextEditingController();
   DateTime _appointmentDate = new DateTime.now();
 
@@ -44,6 +45,8 @@ class ViewClientState extends State<ViewClientWidget> {
   bool fileExist = false;
   Map<String, dynamic> fileContent;
   var clientList;
+
+  var importantTask = false; // checkbox
 
   // JSON create & read
   @override
@@ -115,6 +118,14 @@ class ViewClientState extends State<ViewClientWidget> {
     print("tu sie bedzie edytowac");
   }
 
+  void importanTaskChanged(bool value) {
+    if (this.mounted) {
+      setState(() {
+        importantTask = value;
+      });
+    }
+  }
+
   void removeClient() {
     if (this.mounted) {
       setState(() {
@@ -135,6 +146,8 @@ class ViewClientState extends State<ViewClientWidget> {
     if (this.mounted) {
       setState(() {
         client.tasks += task.text.toString();
+        if(importantTask == true)
+          client.tasks += "!";
         client.tasks += '\n';
         print("the task has been added!");
         updateClient();
@@ -149,8 +162,9 @@ class ViewClientState extends State<ViewClientWidget> {
         client.notes += dateToString(_appointmentDate);
         client.notes += ": ";
         client.notes += note.text.toString();
-        client.notes += " (licznik: ";
-        client.notes += counterStatus.text.toString();
+        client.notes += " (licznik: C:";
+        client.notes += counterStatus.text.toString() + ", K:";
+        client.notes += colorCounterStatus.text.toString();
         client.notes += ")";
         client.notes += '\n';
         print("the note has been added!");
@@ -452,9 +466,17 @@ class ViewClientState extends State<ViewClientWidget> {
                       ),
                       new Padding(padding: new EdgeInsets.only(bottom: 5.0)),
                       new TextField(
-                        decoration:
-                            InputDecoration(hintText: 'Dodaj stan licznika...'),
+                        decoration: InputDecoration(
+                            hintText: 'Dodaj stan licznika (czb)...'),
                         controller: counterStatus,
+                        keyboardType: TextInputType.numberWithOptions(
+                            signed: false, decimal: false),
+                      ),
+                      new Padding(padding: new EdgeInsets.only(bottom: 5.0)),
+                      new TextField(
+                        decoration: InputDecoration(
+                            hintText: 'Dodaj stan licznika (kolor)...'),
+                        controller: colorCounterStatus,
                         keyboardType: TextInputType.numberWithOptions(
                             signed: false, decimal: false),
                       ),
@@ -549,6 +571,25 @@ class ViewClientState extends State<ViewClientWidget> {
                         controller: task,
                       ),
                       new Padding(padding: new EdgeInsets.only(bottom: 5.0)),
+                      new Container(
+                        padding: new EdgeInsets.all(2.0),
+                        child: new Column(
+                          children: <Widget>[
+                            new Row(
+                              children: <Widget>[
+                                new Icon(Icons.warning, color: Colors.redAccent,),
+                                new Text("ważne zadanie:"),
+                                new Checkbox(
+                                  value: importantTask,
+                                  onChanged: (bool value) {
+                                    importanTaskChanged(value);
+                                  },
+                                )
+                              ],
+                            )
+                          ],
+                        ),
+                      ),
                       new FlatButton(
                         child: new Text(
                           "Dodaj zadanie!",
