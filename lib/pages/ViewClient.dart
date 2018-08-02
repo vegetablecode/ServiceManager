@@ -151,7 +151,6 @@ class ViewClientState extends State<ViewClientWidget> {
         client.tasks += '\n';
         print("the task has been added!");
         updateClient();
-        /* is this an important task? (!) */
       });
     }
   }
