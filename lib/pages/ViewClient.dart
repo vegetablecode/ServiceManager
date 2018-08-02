@@ -90,6 +90,12 @@ class ViewClientState extends State<ViewClientWidget> {
     file.writeAsStringSync(JSON.encode(content));
   }
 
+  void writeAsNewFile(Map<String, dynamic> content) {
+    createFile(content, dir, fileName);
+    this.setState(() => fileContent = JSON.decode(jsonFile.readAsStringSync()));
+    print("A new file with data has been created!");
+  }
+
   void writeToFile(Map<String, dynamic> content) {
     print("Writing to file!");
     if (fileExist) {
@@ -109,6 +115,17 @@ class ViewClientState extends State<ViewClientWidget> {
     print("tu sie bedzie edytowac");
   }
 
+  void removeClient() {
+    if (this.mounted) {
+      setState(() {
+        Map<String, dynamic> newFileContent = fileContent;
+        newFileContent.remove(name);
+        writeAsNewFile(newFileContent);
+      });
+    }
+    Navigator.pop(context);
+  }
+
   void removeTaskAction(int index) {
     client.tasks = removeTask(client.tasks, getTaskList(client.tasks), index);
     updateClient();
@@ -121,6 +138,7 @@ class ViewClientState extends State<ViewClientWidget> {
         client.tasks += '\n';
         print("the task has been added!");
         updateClient();
+        /* is this an important task? (!) */
       });
     }
   }
@@ -169,7 +187,7 @@ class ViewClientState extends State<ViewClientWidget> {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-      backgroundColor: MyColors.background,
+        backgroundColor: MyColors.background,
         appBar: new AppBar(
           title: new Text("Zobacz klienta"),
           backgroundColor: MyColors.tabBar2,
@@ -178,6 +196,7 @@ class ViewClientState extends State<ViewClientWidget> {
           padding: const EdgeInsets.all(5.0),
           children: <Widget>[
             new Card(
+                color: MyColors.card,
                 child: new Container(
                     padding: EdgeInsets.all(5.0),
                     child: new Column(
@@ -340,132 +359,137 @@ class ViewClientState extends State<ViewClientWidget> {
                       ],
                     ))),
             new Card(
+                color: MyColors.card,
                 child: new Container(
-              padding: EdgeInsets.all(5.0),
-              child: new Column(
-                children: <Widget>[
-                  new Text(
-                    "Informacje o umowie",
-                    style: new TextStyle(fontSize: 20.0),
-                  ),
-                  new Padding(padding: new EdgeInsets.only(bottom: 20.0)),
-                  new Row(
+                  padding: EdgeInsets.all(5.0),
+                  child: new Column(
                     children: <Widget>[
-                      new Text("Data rozpoczęcia umowy: "),
-                      new Padding(padding: new EdgeInsets.only(left: 5.0)),
                       new Text(
-                        dateToString(DateTime.parse(client.beginDate)),
-                        style: new TextStyle(fontWeight: FontWeight.bold),
+                        "Informacje o umowie",
+                        style: new TextStyle(fontSize: 20.0),
+                      ),
+                      new Padding(padding: new EdgeInsets.only(bottom: 20.0)),
+                      new Row(
+                        children: <Widget>[
+                          new Text("Data rozpoczęcia umowy: "),
+                          new Padding(padding: new EdgeInsets.only(left: 5.0)),
+                          new Text(
+                            dateToString(DateTime.parse(client.beginDate)),
+                            style: new TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      ),
+                      new Padding(padding: new EdgeInsets.only(bottom: 5.0)),
+                      new Row(
+                        children: <Widget>[
+                          new Text("Data ostatniego rozliczenia: "),
+                          new Padding(padding: new EdgeInsets.only(left: 5.0)),
+                          new Text(
+                            "01.01.2018",
+                            style: new TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      ),
+                      new Padding(padding: new EdgeInsets.only(bottom: 5.0)),
+                      new Row(
+                        children: <Widget>[
+                          new Text("Data kolejnego rozliczenia: "),
+                          new Padding(padding: new EdgeInsets.only(left: 5.0)),
+                          new Text(
+                            "01.01.2018",
+                            style: new TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      ),
+                      new Padding(padding: new EdgeInsets.only(bottom: 5.0)),
+                      new Row(
+                        children: <Widget>[
+                          new Text("Liczba kopii ponad stan: "),
+                          new Padding(padding: new EdgeInsets.only(left: 5.0)),
+                          new Text(
+                            "0",
+                            style: new TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      ),
+                      new Padding(padding: new EdgeInsets.only(bottom: 5.0)),
+                      new Row(
+                        children: <Widget>[
+                          new Text("Dodatkowo do zapłaty w tym miesiącu: "),
+                          new Padding(padding: new EdgeInsets.only(left: 5.0)),
+                          new Text(
+                            "20",
+                            style: new TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          new Padding(padding: new EdgeInsets.only(left: 5.0)),
+                          new Text(
+                            "zł",
+                            style: new TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                        ],
                       ),
                     ],
                   ),
-                  new Padding(padding: new EdgeInsets.only(bottom: 5.0)),
-                  new Row(
-                    children: <Widget>[
-                      new Text("Data ostatniego rozliczenia: "),
-                      new Padding(padding: new EdgeInsets.only(left: 5.0)),
-                      new Text(
-                        "01.01.2018",
-                        style: new TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                    ],
-                  ),
-                  new Padding(padding: new EdgeInsets.only(bottom: 5.0)),
-                  new Row(
-                    children: <Widget>[
-                      new Text("Data kolejnego rozliczenia: "),
-                      new Padding(padding: new EdgeInsets.only(left: 5.0)),
-                      new Text(
-                        "01.01.2018",
-                        style: new TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                    ],
-                  ),
-                  new Padding(padding: new EdgeInsets.only(bottom: 5.0)),
-                  new Row(
-                    children: <Widget>[
-                      new Text("Liczba kopii ponad stan: "),
-                      new Padding(padding: new EdgeInsets.only(left: 5.0)),
-                      new Text(
-                        "0",
-                        style: new TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                    ],
-                  ),
-                  new Padding(padding: new EdgeInsets.only(bottom: 5.0)),
-                  new Row(
-                    children: <Widget>[
-                      new Text("Dodatkowo do zapłaty w tym miesiącu: "),
-                      new Padding(padding: new EdgeInsets.only(left: 5.0)),
-                      new Text(
-                        "20",
-                        style: new TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                      new Padding(padding: new EdgeInsets.only(left: 5.0)),
-                      new Text(
-                        "zł",
-                        style: new TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            )),
+                )),
             new Card(
+                color: MyColors.card,
                 child: new Container(
-              padding: EdgeInsets.all(5.0),
-              child: new Column(
-                children: <Widget>[
-                  new Text(
-                    "Wizyty",
-                    style: new TextStyle(fontSize: 20.0),
-                  ),
-                  new Padding(padding: new EdgeInsets.only(bottom: 20.0)),
-                  new Row(
-                    children: <Widget>[new Text(client.notes.toString())],
-                  ),
-                  new TextField(
-                    decoration: InputDecoration(hintText: 'Dodaj notatkę...'),
-                    controller: note,
-                  ),
-                  new Padding(padding: new EdgeInsets.only(bottom: 5.0)),
-                  new TextField(
-                    decoration:
-                        InputDecoration(hintText: 'Dodaj stan licznika...'),
-                    controller: counterStatus,
-                    keyboardType: TextInputType.numberWithOptions(
-                        signed: false, decimal: false),
-                  ),
-                  new Padding(padding: new EdgeInsets.only(bottom: 20.0)),
-                  new Row(
+                  padding: EdgeInsets.all(5.0),
+                  child: new Column(
                     children: <Widget>[
-                      new Text("Wybrana data: "),
-                      new Padding(padding: new EdgeInsets.only(left: 5.0)),
-                      new Text("${dateToString(_appointmentDate)}",
-                          style: new TextStyle(fontWeight: FontWeight.bold)),
+                      new Text(
+                        "Wizyty",
+                        style: new TextStyle(fontSize: 20.0),
+                      ),
+                      new Padding(padding: new EdgeInsets.only(bottom: 20.0)),
+                      new Row(
+                        children: <Widget>[new Text(client.notes.toString())],
+                      ),
+                      new TextField(
+                        decoration:
+                            InputDecoration(hintText: 'Dodaj notatkę...'),
+                        controller: note,
+                      ),
+                      new Padding(padding: new EdgeInsets.only(bottom: 5.0)),
+                      new TextField(
+                        decoration:
+                            InputDecoration(hintText: 'Dodaj stan licznika...'),
+                        controller: counterStatus,
+                        keyboardType: TextInputType.numberWithOptions(
+                            signed: false, decimal: false),
+                      ),
+                      new Padding(padding: new EdgeInsets.only(bottom: 20.0)),
+                      new Row(
+                        children: <Widget>[
+                          new Text("Wybrana data: "),
+                          new Padding(padding: new EdgeInsets.only(left: 5.0)),
+                          new Text("${dateToString(_appointmentDate)}",
+                              style:
+                                  new TextStyle(fontWeight: FontWeight.bold)),
+                          new FlatButton(
+                            child: new Text(
+                              "Wybierz inną datę!",
+                              style: TextStyle(color: MyColors.flatButton),
+                            ),
+                            onPressed: () {
+                              _selectDate(context);
+                            },
+                          ),
+                        ],
+                      ),
+                      new Padding(padding: new EdgeInsets.only(bottom: 5.0)),
                       new FlatButton(
                         child: new Text(
-                          "Wybierz inną datę!",
+                          "Dodaj notatkę!",
                           style: TextStyle(color: MyColors.flatButton),
                         ),
-                        onPressed: () {
-                          _selectDate(context);
-                        },
+                        onPressed: addNote,
                       ),
                     ],
                   ),
-                  new Padding(padding: new EdgeInsets.only(bottom: 5.0)),
-                  new FlatButton(
-                    child: new Text(
-                      "Dodaj notatkę!",
-                      style: TextStyle(color: MyColors.flatButton),
-                    ),
-                    onPressed: addNote,
-                  ),
-                ],
-              ),
-            )),
+                )),
             new Card(
+              color: MyColors.card,
               child: new Container(
                 padding: new EdgeInsets.all(5.0),
                 child: new Column(
@@ -481,6 +505,7 @@ class ViewClientState extends State<ViewClientWidget> {
             new Container(
                 height: 200.0,
                 child: new Card(
+                  color: MyColors.card,
                   child: ListView.builder(
                     itemCount: client.tasks == null
                         ? 0
@@ -501,7 +526,9 @@ class ViewClientState extends State<ViewClientWidget> {
                             ),
                             new IconButton(
                               icon: new Icon(Icons.delete),
-                              onPressed: () {removeTaskAction(index);},
+                              onPressed: () {
+                                removeTaskAction(index);
+                              },
                             ),
                           ],
                         ),
@@ -510,43 +537,34 @@ class ViewClientState extends State<ViewClientWidget> {
                   ),
                 )),
             new Card(
+                color: MyColors.card,
                 child: new Container(
-              padding: new EdgeInsets.all(5.0),
-              child: new Column(
-                children: <Widget>[
-                  new Padding(padding: new EdgeInsets.only(bottom: 20.0)),
-                  new TextField(
-                    decoration: InputDecoration(hintText: 'Dodaj zadanie...'),
-                    controller: task,
+                  padding: new EdgeInsets.all(5.0),
+                  child: new Column(
+                    children: <Widget>[
+                      new Padding(padding: new EdgeInsets.only(bottom: 20.0)),
+                      new TextField(
+                        decoration:
+                            InputDecoration(hintText: 'Dodaj zadanie...'),
+                        controller: task,
+                      ),
+                      new Padding(padding: new EdgeInsets.only(bottom: 5.0)),
+                      new FlatButton(
+                        child: new Text(
+                          "Dodaj zadanie!",
+                          style: TextStyle(color: MyColors.flatButton),
+                        ),
+                        onPressed: addTask,
+                      ),
+                    ],
                   ),
-                  new Padding(padding: new EdgeInsets.only(bottom: 5.0)),
-                  new FlatButton(
-                    child: new Text(
-                      "Dodaj zadanie!",
-                      style: TextStyle(color: MyColors.flatButton),
-                    ),
-                    onPressed: addTask,
-                  ),
-                ],
-              ),
-            )),
+                )),
             new Column(
               children: <Widget>[
                 new Padding(padding: new EdgeInsets.only(bottom: 5.0)),
-                new RaisedButton(
-                  child: new Text("Dodaj stan licznika"),
-                  color: MyColors.flatButtonFill,
-                  onPressed: editClient,
-                ),
-                new Padding(padding: new EdgeInsets.only(bottom: 5.0)),
-                new FlatButton(
-                  child: new Text("Edytuj klienta"),
-                  onPressed: editClient,
-                ),
-                new Padding(padding: new EdgeInsets.only(bottom: 5.0)),
                 new FlatButton(
                   child: new Text("Usuń klienta"),
-                  onPressed: editClient,
+                  onPressed: removeClient,
                 )
               ],
             )
@@ -585,5 +603,4 @@ class ViewClientState extends State<ViewClientWidget> {
     }
     return newTasks;
   }
-
 }

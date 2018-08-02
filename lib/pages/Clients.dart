@@ -36,7 +36,20 @@ class ClientsState extends State<ClientsWidget> {
       dir = directory;
       jsonFile = new File(dir.path + "/" + fileName);
       fileExist = jsonFile.existsSync();
-      if ((fileExist)&&(this.mounted)) {
+      if ((fileExist) && (this.mounted)) {
+        this.setState(
+            () => fileContent = JSON.decode(jsonFile.readAsStringSync()));
+        clientList = fileContent.keys.toList();
+      }
+    });
+  }
+
+  void reloadState() {
+    getApplicationDocumentsDirectory().then((Directory directory) {
+      dir = directory;
+      jsonFile = new File(dir.path + "/" + fileName);
+      fileExist = jsonFile.existsSync();
+      if ((fileExist) && (this.mounted)) {
         this.setState(
             () => fileContent = JSON.decode(jsonFile.readAsStringSync()));
         clientList = fileContent.keys.toList();
@@ -48,10 +61,16 @@ class ClientsState extends State<ClientsWidget> {
     if (this.mounted) {
       setState(() {
         print(name);
-        Navigator.push(
+        Navigator
+            .push(
           context,
           MaterialPageRoute(builder: (context) => viewClient.ViewClient(name)),
-        );
+        )
+            .then((value) {
+          setState(() {
+            reloadState();
+          });
+        });
       });
     }
   }
@@ -59,42 +78,43 @@ class ClientsState extends State<ClientsWidget> {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-      backgroundColor: MyColors.background,
+        backgroundColor: MyColors.background,
         body: new ListView.builder(
             itemCount: fileContent == null ? 0 : fileContent.length,
             itemBuilder: (BuildContext context, int index) {
               return new Card(
+                  color: MyColors.card,
                   child: new Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  new Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
-                      new Padding(
-                        padding: EdgeInsets.only(left: 5.0),
+                      new Row(
+                        children: <Widget>[
+                          new Padding(
+                            padding: EdgeInsets.only(left: 5.0),
+                          ),
+                          new Icon(
+                            Icons.remove_circle,
+                            color: Colors.redAccent,
+                          ),
+                          new Icon(
+                            Icons.check_circle,
+                            color: Colors.green,
+                          ),
+                          new Padding(
+                            padding: EdgeInsets.only(left: 5.0),
+                          ),
+                          new Text(clientList[index]),
+                        ],
                       ),
-                      new Icon(
-                        Icons.remove_circle,
-                        color: Colors.redAccent,
-                      ),
-                      new Icon(
-                        Icons.check_circle,
-                        color: Colors.green,
-                      ),
-                      new Padding(
-                        padding: EdgeInsets.only(left: 5.0),
-                      ),
-                      new Text(clientList[index]),
+                      new IconButton(
+                        icon: new Icon(Icons.remove_red_eye),
+                        color: Colors.blueAccent,
+                        onPressed: () {
+                          view(clientList[index]);
+                        },
+                      )
                     ],
-                  ),
-                  new IconButton(
-                    icon: new Icon(Icons.remove_red_eye),
-                    color: Colors.blueAccent,
-                    onPressed: () {
-                      view(clientList[index]);
-                    },
-                  )
-                ],
-              ));
+                  ));
             }));
   }
 }
