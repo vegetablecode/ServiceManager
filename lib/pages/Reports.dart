@@ -113,20 +113,20 @@ class ReportsState extends State<ReportsWidget> {
                         ),
                         new Card(
                           color: (getStandardTasks(
-                                        clients[taskIndexes[index]].tasks) ==
-                                    "")
-                                ? MyColors.noTask
-                                : MyColors.task,
+                                      clients[taskIndexes[index]].tasks) ==
+                                  "")
+                              ? MyColors.noTask
+                              : MyColors.task,
                           child: new Container(
                             padding: new EdgeInsets.all(5.0),
                             child: new Row(
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: <Widget>[
                                 new Icon(Icons.list),
-                                  new Padding(
-                                      padding: new EdgeInsets.only(left: 5.0)),
+                                new Padding(
+                                    padding: new EdgeInsets.only(left: 5.0)),
                                 new Text(getStandardTasks(
-                                      clients[taskIndexes[index]].tasks)),
+                                    clients[taskIndexes[index]].tasks)),
                               ],
                             ),
                           ),
@@ -171,14 +171,14 @@ class ReportsState extends State<ReportsWidget> {
     String importantTasks = "";
     String tempTask = "";
     for (int i = 0; i < tasks.length; i++) {
-      if(tasks[i] == "\n"){
-        if(tempTask.contains("!") == true) {
+      if (tasks[i] == "\n") {
+        if (tempTask.contains("!") == true) {
           if (importantTasks.length > 1) importantTasks += "\n";
           importantTasks += tempTask;
         }
         tempTask = "";
-      }
-      else tempTask += tasks[i];
+      } else
+        tempTask += tasks[i];
     }
     return importantTasks;
   }
@@ -192,10 +192,10 @@ class ReportsState extends State<ReportsWidget> {
           if (standardTasks.length > 1) standardTasks += "\n";
           standardTasks += tempTask;
         }
-        else
-          tempTask = "";
-      }
-      else tempTask += tasks[i];
+
+        tempTask = "";
+      } else
+        tempTask += tasks[i];
     }
     return standardTasks;
   }
