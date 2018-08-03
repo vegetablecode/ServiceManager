@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:path_provider/path_provider.dart';
 import 'package:elbiserwis/styles/MyColors.dart';
 import './ViewClient.dart' as viewClient;
+import './Search.dart' as searchClient;
 
 class Clients extends StatelessWidget {
   @override
@@ -75,9 +76,31 @@ class ClientsState extends State<ClientsWidget> {
     }
   }
 
+  void search() {
+    if (this.mounted) {
+      setState(() {
+        Navigator
+            .push(
+          context,
+          MaterialPageRoute(builder: (context) => searchClient.Search(clientList)),
+        )
+            .then((value) {
+          setState(() {
+            reloadState();
+          });
+        });
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
+        floatingActionButton: new FloatingActionButton(
+          onPressed: search,
+          child: new Icon(Icons.search),
+          backgroundColor: MyColors.flatButtonFill,
+        ),
         backgroundColor: MyColors.background,
         body: new ListView.builder(
             itemCount: fileContent == null ? 0 : fileContent.length,
