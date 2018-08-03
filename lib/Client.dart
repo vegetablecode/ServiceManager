@@ -9,9 +9,10 @@ class Client {
   var deviceName = ""; // nazwa urzadzenia
   var freeCopies = 0; // liczba darmowych kopii
   var pagePrice = 0.0; // cena za kopie
-  // --- > updated
   var colorFreeCopies = 0; // liczba darmowych kolorowych kopii
   var colorPagePrice = 0.0; // cena za kopie kolorowa
+  var initialCopies = 0;
+  var initialColorCopies = 0;
 
   String beginDate = ""; // data poczatku umowy
   String lastDate = ""; // ostatni termin wizyty
@@ -40,7 +41,9 @@ class Client {
       this.lastDate,
       this.nextDate,
       this.notes,
-      this.tasks);
+      this.tasks,
+      this.initialCopies,
+      this.initialColorCopies);
 
   Client.fromJson(Map<String, dynamic> json)
       : nip = json['nip'],
@@ -58,7 +61,9 @@ class Client {
         lastDate = json['lastDate'],
         nextDate = json['nextDate'],
         notes = json['notes'],
-        tasks = json['tasks'];
+        tasks = json['tasks'],
+        initialCopies = json['initialCopies'],
+        initialColorCopies = json['initialColorCopies'];
 
   Map<String, dynamic> toJson() => {
         'nip': nip,
@@ -76,7 +81,9 @@ class Client {
         'lastDate': lastDate,
         'nextDate': nextDate,
         'notes': notes,
-        'tasks': tasks
+        'tasks': tasks,
+        'initialCopies': initialCopies,
+        'initialColorCopies': initialColorCopies
       };
 
   // debug

@@ -31,6 +31,8 @@ class NewClientState extends State<NewClientWidget> {
   TextEditingController pagePrice = new TextEditingController();
   TextEditingController colorFreeCopies = new TextEditingController();
   TextEditingController colorPagePrice = new TextEditingController();
+  TextEditingController initialCounter = new TextEditingController();
+  TextEditingController initialColorCounter = new TextEditingController();
   DateTime _beginDate = new DateTime.now();
   String notes = "";
   String tasks = "";
@@ -120,7 +122,9 @@ class NewClientState extends State<NewClientWidget> {
             "",
             "",
             notes,
-            tasks);
+            tasks,
+            int.tryParse(initialCounter.text) ?? 0,
+            int.tryParse(initialColorCounter.text) ?? 0,);
         tomek.display();
         print("client has been created");
 
@@ -225,6 +229,11 @@ class NewClientState extends State<NewClientWidget> {
           type: TextInputType.text,
         ),
         new MyCard(
+          label: "Początkowy stan licznika (czb): ",
+          controller: initialCounter,
+          type: TextInputType.numberWithOptions(signed: false, decimal: false),
+        ),
+        new MyCard(
           label: "Liczba darmowych kopii (czb): ",
           controller: freeCopies,
           type: TextInputType.numberWithOptions(signed: false, decimal: false),
@@ -233,6 +242,11 @@ class NewClientState extends State<NewClientWidget> {
           label: "Cena za stronę (zł) (czb): ",
           controller: pagePrice,
           type: TextInputType.numberWithOptions(signed: false, decimal: true),
+        ),
+        new MyCard(
+          label: "Początkowy stan licznika (czb): ",
+          controller: initialColorCounter,
+          type: TextInputType.numberWithOptions(signed: false, decimal: false),
         ),
         new MyCard(
           label: "Liczba darmowych kopii (kolor): ",

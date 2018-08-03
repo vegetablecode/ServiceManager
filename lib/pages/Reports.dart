@@ -76,7 +76,7 @@ class ReportsState extends State<ReportsWidget> {
                         new Row(
                           children: <Widget>[
                             new Text(
-                              "Ważne zadania:",
+                              "Pilne zadania:",
                               style: new TextStyle(fontWeight: FontWeight.bold),
                             ),
                           ],
@@ -106,7 +106,7 @@ class ReportsState extends State<ReportsWidget> {
                         new Row(
                           children: <Widget>[
                             new Text(
-                              "Zwykłe zadania:",
+                              "Zadania przy następnej wizycie:",
                               style: new TextStyle(fontWeight: FontWeight.bold),
                             ),
                           ],
@@ -156,7 +156,7 @@ class ReportsState extends State<ReportsWidget> {
 
   Client getClient(Map<String, dynamic> fileContent) {
     Client client = new Client("", 0, 0, "", 0, 0.0, true, false, false, 0, 0.0,
-        DateTime.now().toIso8601String(), "", "", "", null);
+        DateTime.now().toIso8601String(), "", "", "", null, 0, 0);
     if (fileContent != null) {
       client = Client.fromJson(fileContent);
     }

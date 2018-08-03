@@ -55,7 +55,7 @@ class ViewClientState extends State<ViewClientWidget> {
 
     // client details
     client = new Client("", 0, 0, "", 0, 0.0, true, false, false, 0, 0.0,
-        DateTime.now().toIso8601String(), "", "", "", null);
+        DateTime.now().toIso8601String(), "", "", "", null, 0, 0);
     getApplicationDocumentsDirectory().then((Directory directory) {
       dir = directory;
       jsonFile = new File(dir.path + "/" + fileName);
@@ -191,7 +191,9 @@ class ViewClientState extends State<ViewClientWidget> {
         "",
         "",
         client.notes,
-        client.tasks);
+        client.tasks,
+        client.initialCopies,
+        client.initialColorCopies);
 
     Map<String, dynamic> updatedMap = {name: updatedClient.toJson()};
     writeToFile(updatedMap);
@@ -270,6 +272,36 @@ class ViewClientState extends State<ViewClientWidget> {
                             new Padding(
                                 padding: new EdgeInsets.only(left: 5.0)),
                             new Text(client.deviceName),
+                          ],
+                        ),
+                        new Padding(padding: new EdgeInsets.only(bottom: 5.0)),
+                        new Row(
+                          children: <Widget>[
+                            new Text(
+                              "początkowy stan licznika (czb): ",
+                              style: new TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            new Padding(
+                                padding: new EdgeInsets.only(left: 5.0)),
+                            new Text(client.initialCopies.toString()),
+                            new Padding(
+                                padding: new EdgeInsets.only(left: 5.0)),
+                            new Text("szt.")
+                          ],
+                        ),
+                        new Padding(padding: new EdgeInsets.only(bottom: 5.0)),
+                        new Row(
+                          children: <Widget>[
+                            new Text(
+                              "początkowy stan licznika (kolor): ",
+                              style: new TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            new Padding(
+                                padding: new EdgeInsets.only(left: 5.0)),
+                            new Text(client.initialColorCopies.toString()),
+                            new Padding(
+                                padding: new EdgeInsets.only(left: 5.0)),
+                            new Text("szt.")
                           ],
                         ),
                         new Padding(padding: new EdgeInsets.only(bottom: 5.0)),
