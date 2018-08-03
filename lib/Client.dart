@@ -11,8 +11,13 @@ class Client {
   var pagePrice = 0.0; // cena za kopie
   var colorFreeCopies = 0; // liczba darmowych kolorowych kopii
   var colorPagePrice = 0.0; // cena za kopie kolorowa
-  var initialCopies = 0;
-  var initialColorCopies = 0;
+  var initialCopies = 0; // poczatkowa liczba kopii (czb)
+  var initialColorCopies = 0; // poczatkowa liczba kopii (kolor)
+  var newCopyCount = 0;
+  var newColorCopyCount = 0;
+  var prevCopyCount = 0;
+  var prevColorCopyCount = 0;
+  var copiesLimitReached = false;
 
   String beginDate = ""; // data poczatku umowy
   String lastDate = ""; // ostatni termin wizyty
@@ -43,7 +48,12 @@ class Client {
       this.notes,
       this.tasks,
       this.initialCopies,
-      this.initialColorCopies);
+      this.initialColorCopies,
+      this.newCopyCount,
+      this.newColorCopyCount,
+      this.prevCopyCount,
+      this.prevColorCopyCount,
+      this.copiesLimitReached);
 
   Client.fromJson(Map<String, dynamic> json)
       : nip = json['nip'],
@@ -63,7 +73,12 @@ class Client {
         notes = json['notes'],
         tasks = json['tasks'],
         initialCopies = json['initialCopies'],
-        initialColorCopies = json['initialColorCopies'];
+        initialColorCopies = json['initialColorCopies'],
+        newCopyCount = json['newCopyCount'],
+        newColorCopyCount = json['newColorCopyCount'],
+        prevCopyCount = json['prevCopyCount'],
+        prevColorCopyCount = json['prevColorCopyCount'],
+        copiesLimitReached = json['copiesLimitReached'];
 
   Map<String, dynamic> toJson() => {
         'nip': nip,
@@ -83,7 +98,12 @@ class Client {
         'notes': notes,
         'tasks': tasks,
         'initialCopies': initialCopies,
-        'initialColorCopies': initialColorCopies
+        'initialColorCopies': initialColorCopies,
+        'newCopyCount': newCopyCount,
+        'newColorCopyCount': newColorCopyCount,
+        'prevCopyCount': prevCopyCount,
+        'prevColorCopyCount': prevColorCopyCount,
+        'copiesLimitReached': copiesLimitReached
       };
 
   // debug

@@ -119,12 +119,17 @@ class NewClientState extends State<NewClientWidget> {
             int.tryParse(colorFreeCopies.text) ?? 0,
             double.tryParse(colorPagePrice.text) ?? 0.0,
             _beginDate.toIso8601String(),
-            "",
-            "",
+            _beginDate.toIso8601String(),
+            quaterRate? _beginDate.add(new Duration(days: 90)).toString(): _beginDate.add(new Duration(days: 30)).toString(),
             notes,
             tasks,
             int.tryParse(initialCounter.text) ?? 0,
-            int.tryParse(initialColorCounter.text) ?? 0,);
+            int.tryParse(initialColorCounter.text) ?? 0,
+            int.tryParse(initialCounter.text) ?? 0,
+            int.tryParse(initialColorCounter.text) ?? 0,
+            int.tryParse(initialCounter.text) ?? 0,
+            int.tryParse(initialColorCounter.text) ?? 0,
+            false);
         tomek.display();
         print("client has been created");
 

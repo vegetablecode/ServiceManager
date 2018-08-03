@@ -55,7 +55,7 @@ class ViewClientState extends State<ViewClientWidget> {
 
     // client details
     client = new Client("", 0, 0, "", 0, 0.0, true, false, false, 0, 0.0,
-        DateTime.now().toIso8601String(), "", "", "", null, 0, 0);
+        DateTime.now().toIso8601String(), DateTime.now().toIso8601String(), DateTime.now().toIso8601String(), "", null, 0, 0, 0, 0, 0, 0, false);
     getApplicationDocumentsDirectory().then((Directory directory) {
       dir = directory;
       jsonFile = new File(dir.path + "/" + fileName);
@@ -158,6 +158,7 @@ class ViewClientState extends State<ViewClientWidget> {
   void addNote() {
     if (this.mounted) {
       setState(() {
+        // add note
         client.notes += dateToString(_appointmentDate);
         client.notes += ": ";
         client.notes += note.text.toString();
@@ -167,10 +168,36 @@ class ViewClientState extends State<ViewClientWidget> {
         client.notes += ")";
         client.notes += '\n';
         print("the note has been added!");
+
+        // add dates & update counter
+        client.lastDate = dateToString(_appointmentDate);
+        client.nextDate = client.quaterRate? _appointmentDate.add(new Duration(days: 90)).toString(): _appointmentDate.add(new Duration(days: 30)).toString();
+        client.prevCopyCount = client.newCopyCount;
+        client.prevColorCopyCount = client.newColorCopyCount;
+        client.newCopyCount = int.tryParse(counterStatus.text) ?? 0;
+        client.newColorCopyCount = int.tryParse(colorCounterStatus.text) ?? 0;
+        client.copiesLimitReached = (getPriceOfAddCopies()>0.0)? true: false; 
       });
     }
 
     updateClient();
+  }
+
+  double getPriceOfAddCopies() {
+    int bwCopies = ((client.newCopyCount-client.prevCopyCount)-client.freeCopies);
+    int colorCopies = ((client.newColorCopyCount-client.prevColorCopyCount)-client.colorFreeCopies);
+    var bwPrice = bwCopies*client.pagePrice;
+    var colorPrice = colorCopies*client.colorPagePrice;
+    var totalPrice = ((bwPrice<0.0)? bwPrice: 0.0) + ((colorPrice<0.0)? colorPrice: 0.0);
+    return totalPrice;
+  }
+
+  int getOverCopies() {
+    return ((client.newCopyCount-client.prevCopyCount)-client.freeCopies);
+  }
+
+  int getOverColorCopies() {
+    return ((client.newColorCopyCount-client.prevColorCopyCount)-client.colorFreeCopies);
   }
 
   void updateClient() {
@@ -188,12 +215,17 @@ class ViewClientState extends State<ViewClientWidget> {
         client.colorFreeCopies,
         client.colorPagePrice,
         client.beginDate,
-        "",
-        "",
+        client.lastDate,
+        client.nextDate,
         client.notes,
         client.tasks,
         client.initialCopies,
-        client.initialColorCopies);
+        client.initialColorCopies,
+        client.newCopyCount,
+        client.newColorCopyCount,
+        client.prevCopyCount,
+        client.prevColorCopyCount,
+        client.copiesLimitReached);
 
     Map<String, dynamic> updatedMap = {name: updatedClient.toJson()};
     writeToFile(updatedMap);
@@ -430,7 +462,7 @@ class ViewClientState extends State<ViewClientWidget> {
                           new Text("Data ostatniego rozliczenia: "),
                           new Padding(padding: new EdgeInsets.only(left: 5.0)),
                           new Text(
-                            "01.01.2018",
+                            dateToString(DateTime.parse(client.lastDate)),
                             style: new TextStyle(fontWeight: FontWeight.bold),
                           ),
                         ],
@@ -441,7 +473,7 @@ class ViewClientState extends State<ViewClientWidget> {
                           new Text("Data kolejnego rozliczenia: "),
                           new Padding(padding: new EdgeInsets.only(left: 5.0)),
                           new Text(
-                            "01.01.2018",
+                            dateToString(DateTime.parse(client.nextDate)),
                             style: new TextStyle(fontWeight: FontWeight.bold),
                           ),
                         ],
@@ -452,7 +484,7 @@ class ViewClientState extends State<ViewClientWidget> {
                           new Text("Liczba kopii ponad stan: "),
                           new Padding(padding: new EdgeInsets.only(left: 5.0)),
                           new Text(
-                            "0",
+                            getOverCopies().toString(),
                             style: new TextStyle(fontWeight: FontWeight.bold),
                           ),
                         ],
@@ -463,7 +495,7 @@ class ViewClientState extends State<ViewClientWidget> {
                           new Text("Dodatkowo do zapłaty w tym miesiącu: "),
                           new Padding(padding: new EdgeInsets.only(left: 5.0)),
                           new Text(
-                            "20",
+                            getPriceOfAddCopies().toString(),
                             style: new TextStyle(fontWeight: FontWeight.bold),
                           ),
                           new Padding(padding: new EdgeInsets.only(left: 5.0)),
