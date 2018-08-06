@@ -54,8 +54,31 @@ class ViewClientState extends State<ViewClientWidget> {
     super.initState();
 
     // client details
-    client = new Client("", 0, 0, "", 0, 0.0, true, false, false, 0, 0.0,
-        DateTime.now().toIso8601String(), DateTime.now().toIso8601String(), DateTime.now().toIso8601String(), "", null, 0, 0, 0, 0, 0, 0, false);
+    client = new Client(
+        "",
+        0,
+        0,
+        "",
+        0,
+        0.0,
+        true,
+        false,
+        false,
+        0,
+        0.0,
+        DateTime.now().toIso8601String(),
+        DateTime.now().toIso8601String(),
+        DateTime.now().toIso8601String(),
+        "",
+        null,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        false,
+        false);
     getApplicationDocumentsDirectory().then((Directory directory) {
       dir = directory;
       jsonFile = new File(dir.path + "/" + fileName);
@@ -146,8 +169,7 @@ class ViewClientState extends State<ViewClientWidget> {
     if (this.mounted) {
       setState(() {
         client.tasks += task.text.toString();
-        if(importantTask == true)
-          client.tasks += "!";
+        if (importantTask == true) client.tasks += "!";
         client.tasks += '\n';
         print("the task has been added!");
         updateClient();
@@ -171,34 +193,49 @@ class ViewClientState extends State<ViewClientWidget> {
 
         // add dates & update counter
         client.lastDate = _appointmentDate.toIso8601String();
-        client.nextDate = client.quaterRate? _appointmentDate.add(new Duration(days: 90)).toString(): _appointmentDate.add(new Duration(days: 30)).toString();
+        client.nextDate = client.quaterRate
+            ? _appointmentDate.add(new Duration(days: 90)).toString()
+            : _appointmentDate.add(new Duration(days: 30)).toString();
         client.prevCopyCount = client.newCopyCount;
         client.prevColorCopyCount = client.newColorCopyCount;
         client.newCopyCount = int.tryParse(counterStatus.text) ?? 0;
         client.newColorCopyCount = int.tryParse(colorCounterStatus.text) ?? 0;
-        client.copiesLimitReached = (getPriceOfAddCopies()>0.0)? true: false; 
+        client.copiesLimitReached =
+            (getPriceOfAddCopies() > 0.0) ? true : false;
       });
     }
 
     updateClient();
   }
 
+  void changePaymentStatus() {
+    if(this.mounted){
+      setState(() {
+              if(client.isInvoicePaid == true)
+                client.isInvoicePaid = false;
+                else client.isInvoicePaid = true;
+            });
+    }
+  }
+
   double getPriceOfAddCopies() {
     int bwCopies = getOverCopies();
     int colorCopies = getOverColorCopies();
-    var bwPrice = bwCopies*client.pagePrice;
-    var colorPrice = colorCopies*client.colorPagePrice;
-    return bwPrice+colorPrice;
+    var bwPrice = bwCopies * client.pagePrice;
+    var colorPrice = colorCopies * client.colorPagePrice;
+    return bwPrice + colorPrice;
   }
 
   int getOverCopies() {
-    int copies = ((client.newCopyCount-client.prevCopyCount)-client.freeCopies);
-    return (copies<=0)? 0: copies;
+    int copies =
+        ((client.newCopyCount - client.prevCopyCount) - client.freeCopies);
+    return (copies <= 0) ? 0 : copies;
   }
 
   int getOverColorCopies() {
-    int copies = ((client.newColorCopyCount-client.prevColorCopyCount)-client.colorFreeCopies);
-    return (copies<=0)? 0: copies;
+    int copies = ((client.newColorCopyCount - client.prevColorCopyCount) -
+        client.colorFreeCopies);
+    return (copies <= 0) ? 0 : copies;
   }
 
   void updateClient() {
@@ -226,7 +263,8 @@ class ViewClientState extends State<ViewClientWidget> {
         client.newColorCopyCount,
         client.prevCopyCount,
         client.prevColorCopyCount,
-        client.copiesLimitReached);
+        client.copiesLimitReached,
+        client.isInvoicePaid);
 
     Map<String, dynamic> updatedMap = {name: updatedClient.toJson()};
     writeToFile(updatedMap);
@@ -517,6 +555,23 @@ class ViewClientState extends State<ViewClientWidget> {
                           ),
                         ],
                       ),
+                      new Padding(padding: new EdgeInsets.only(bottom: 5.0)),
+                      new Row(
+                        children: <Widget>[
+                          new Text("Status faktury: "),
+                          new Padding(padding: new EdgeInsets.only(left: 5.0)),
+                          new Text(
+                            (client.isInvoicePaid)? "opłacona": "nieopłacona",
+                            style: new TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      ),
+                      new Padding(padding: new EdgeInsets.only(bottom: 5.0)),
+                      new RaisedButton(
+                        child: new Text(client.isInvoicePaid? "cofnij wpłatę!": "zapłać!"),
+                        color: client.isInvoicePaid? MyColors.flatButtonFill: MyColors.greenButton,
+                        onPressed: changePaymentStatus,
+                      )
                     ],
                   ),
                 )),
@@ -652,7 +707,10 @@ class ViewClientState extends State<ViewClientWidget> {
                           children: <Widget>[
                             new Row(
                               children: <Widget>[
-                                new Icon(Icons.warning, color: Colors.redAccent,),
+                                new Icon(
+                                  Icons.warning,
+                                  color: Colors.redAccent,
+                                ),
                                 new Text("ważne zadanie:"),
                                 new Checkbox(
                                   value: importantTask,

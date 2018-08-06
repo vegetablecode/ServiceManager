@@ -156,7 +156,7 @@ class ReportsState extends State<ReportsWidget> {
 
   Client getClient(Map<String, dynamic> fileContent) {
     Client client = new Client("", 0, 0, "", 0, 0.0, true, false, false, 0, 0.0,
-        DateTime.now().toIso8601String(), DateTime.now().toIso8601String(), DateTime.now().toIso8601String(), "", null, 0, 0, 0, 0, 0, 0, false);
+        DateTime.now().toIso8601String(), DateTime.now().toIso8601String(), DateTime.now().toIso8601String(), "", null, 0, 0, 0, 0, 0, 0, false, false);
     if (fileContent != null) {
       client = Client.fromJson(fileContent);
     }

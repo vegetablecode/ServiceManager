@@ -129,6 +129,7 @@ class NewClientState extends State<NewClientWidget> {
             int.tryParse(initialColorCounter.text) ?? 0,
             int.tryParse(initialCounter.text) ?? 0,
             int.tryParse(initialColorCounter.text) ?? 0,
+            false,
             false);
         tomek.display();
         print("client has been created");

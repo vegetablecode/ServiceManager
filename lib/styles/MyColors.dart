@@ -11,4 +11,5 @@ class MyColors {
   static const noTask = const Color(0xFFAFCC14);
   static const background = const Color(0xFFF0F4F4);
   static const card = const Color(0xFFFFFFFF);
+  static const greenButton = const Color(0xFF00B250);
 }
