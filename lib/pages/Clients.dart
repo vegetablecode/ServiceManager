@@ -3,6 +3,7 @@ import 'dart:io';
 import 'dart:convert';
 import 'package:path_provider/path_provider.dart';
 import 'package:elbiserwis/styles/MyColors.dart';
+import 'package:elbiserwis/Client.dart';
 import './ViewClient.dart' as viewClient;
 import './Search.dart' as searchClient;
 
@@ -28,6 +29,8 @@ class ClientsState extends State<ClientsWidget> {
   bool fileExist = false;
   Map<String, dynamic> fileContent;
   var clientList;
+  List<Client> clients = new List();
+  List<bool> invoiceStatuses = new List();
 
   // JSON create & read
   @override
@@ -41,6 +44,10 @@ class ClientsState extends State<ClientsWidget> {
         this.setState(
             () => fileContent = JSON.decode(jsonFile.readAsStringSync()));
         clientList = fileContent.keys.toList();
+        for (int i = 0; i < fileContent.length; i++) {
+          clients.add(getClient(fileContent[clientList[i]]));
+        }
+        invoiceStatuses = getInvoicesStatuses(clients);
       }
     });
   }
@@ -54,6 +61,14 @@ class ClientsState extends State<ClientsWidget> {
         this.setState(
             () => fileContent = JSON.decode(jsonFile.readAsStringSync()));
         clientList = fileContent.keys.toList();
+        
+        // update clients
+        List<Client> newList = new List();
+        for (int i = 0; i < fileContent.length; i++) {
+          newList.add(getClient(fileContent[clientList[i]]));
+        }
+        clients = newList;
+        invoiceStatuses = getInvoicesStatuses(newList);
       }
     });
   }
@@ -69,6 +84,7 @@ class ClientsState extends State<ClientsWidget> {
         )
             .then((value) {
           setState(() {
+            print("back from: " + name);
             reloadState();
           });
         });
@@ -82,7 +98,8 @@ class ClientsState extends State<ClientsWidget> {
         Navigator
             .push(
           context,
-          MaterialPageRoute(builder: (context) => searchClient.Search(clientList)),
+          MaterialPageRoute(
+              builder: (context) => searchClient.Search(clientList)),
         )
             .then((value) {
           setState(() {
@@ -116,12 +133,12 @@ class ClientsState extends State<ClientsWidget> {
                             padding: EdgeInsets.only(left: 5.0),
                           ),
                           new Icon(
-                            Icons.remove_circle,
-                            color: Colors.redAccent,
+                            Icons.date_range,
+                            color: getDateColor(getNextDates(clients)[index])
                           ),
                           new Icon(
-                            Icons.check_circle,
-                            color: Colors.green,
+                            Icons.monetization_on,
+                            color: getInvoicesStatuses(clients)[index]? MyColors.greenStatus: MyColors.redStatus,
                           ),
                           new Padding(
                             padding: EdgeInsets.only(left: 5.0),
@@ -139,5 +156,66 @@ class ClientsState extends State<ClientsWidget> {
                     ],
                   ));
             }));
+  }
+
+  List<bool> getInvoicesStatuses(List<Client> clients) {
+    List<bool> statuses = new List();
+    if (clients != null) {
+      for (int i = 0; i < clients.length; i++)
+        statuses.add(clients[i].isInvoicePaid ? true : false);
+    }
+    return statuses;
+  }
+
+  List<String> getNextDates(List<Client> clients) {
+    List<String> dates = new List();
+    if (clients != null) {
+      for (int i = 0; i < clients.length; i++)
+        dates.add(clients[i].nextDate);
+    }
+    return dates;
+  }
+
+  Color getDateColor(String date) {
+    DateTime now = DateTime.now();
+    DateTime inFiveDays = now.add(new Duration(days: 5));
+    DateTime nextDate = DateTime.parse(date);
+    if(nextDate.isBefore(now))
+      return MyColors.redStatus;
+    else if(nextDate.isBefore(inFiveDays))
+      return MyColors.yellowStatus;
+    else return MyColors.greenStatus;
+  }
+
+  Client getClient(Map<String, dynamic> fileContent) {
+    Client client = new Client(
+        "",
+        0,
+        0,
+        "",
+        0,
+        0.0,
+        true,
+        false,
+        false,
+        0,
+        0.0,
+        DateTime.now().toIso8601String(),
+        DateTime.now().toIso8601String(),
+        DateTime.now().toIso8601String(),
+        "",
+        null,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        false,
+        false);
+    if (fileContent != null) {
+      client = Client.fromJson(fileContent);
+    }
+    return client;
   }
 }

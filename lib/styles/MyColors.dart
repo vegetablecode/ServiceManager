@@ -12,4 +12,7 @@ class MyColors {
   static const background = const Color(0xFFF0F4F4);
   static const card = const Color(0xFFFFFFFF);
   static const greenButton = const Color(0xFF00B250);
+  static const redStatus = const Color(0xFFF06659);
+  static const yellowStatus = const Color(0xFFE5B840);
+  static const greenStatus = const Color(0xFF00B250);
 }

@@ -192,6 +192,7 @@ class ViewClientState extends State<ViewClientWidget> {
         print("the note has been added!");
 
         // add dates & update counter
+        client.isInvoicePaid = false;
         client.lastDate = _appointmentDate.toIso8601String();
         client.nextDate = client.quaterRate
             ? _appointmentDate.add(new Duration(days: 90)).toString()
@@ -215,6 +216,7 @@ class ViewClientState extends State<ViewClientWidget> {
                 client.isInvoicePaid = false;
                 else client.isInvoicePaid = true;
             });
+      updateClient();
     }
   }
 
@@ -569,7 +571,7 @@ class ViewClientState extends State<ViewClientWidget> {
                       new Padding(padding: new EdgeInsets.only(bottom: 5.0)),
                       new RaisedButton(
                         child: new Text(client.isInvoicePaid? "cofnij wpłatę!": "zapłać!"),
-                        color: client.isInvoicePaid? MyColors.flatButtonFill: MyColors.greenButton,
+                        color: client.isInvoicePaid? MyColors.greenButton: MyColors.flatButtonFill,
                         onPressed: changePaymentStatus,
                       )
                     ],
