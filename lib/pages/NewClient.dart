@@ -120,7 +120,9 @@ class NewClientState extends State<NewClientWidget> {
             double.tryParse(colorPagePrice.text) ?? 0.0,
             _beginDate.toIso8601String(),
             _beginDate.toIso8601String(),
-            quaterRate? _beginDate.add(new Duration(days: 90)).toString(): _beginDate.add(new Duration(days: 30)).toString(),
+            quaterRate
+                ? _beginDate.add(new Duration(days: 90)).toString()
+                : _beginDate.add(new Duration(days: 30)).toString(),
             notes,
             tasks,
             int.tryParse(initialCounter.text) ?? 0,
@@ -143,7 +145,35 @@ class NewClientState extends State<NewClientWidget> {
         // save to the db
         writeToFile(userMap);
       });
+      clientCreatedDialog();
     }
+  }
+
+  Future<Null> clientCreatedDialog() async {
+    return showDialog<Null>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return new AlertDialog(
+          title: new Text('Utworzono nowego klienta'),
+          content: new SingleChildScrollView(
+            child: new ListBody(
+              children: <Widget>[
+                new Text('Nowy klient został dodany pomyślnie. Możesz zarządzać nim z pozycji panelu klientów.'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            new FlatButton(
+              child: new Text('Ok'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   void quaterRateChanged(bool value) {
@@ -281,7 +311,10 @@ class NewClientState extends State<NewClientWidget> {
         ),
         new Padding(padding: new EdgeInsets.only(bottom: 5.0)),
         new FlatButton(
-          child: new Text("Wybierz inną datę!", style: TextStyle(color: MyColors.flatButton),),
+          child: new Text(
+            "Wybierz inną datę!",
+            style: TextStyle(color: MyColors.flatButton),
+          ),
           onPressed: () {
             _selectDate(context);
           },
