@@ -170,7 +170,7 @@ class ViewClientState extends State<ViewClientWidget> {
         print("the note has been added!");
 
         // add dates & update counter
-        client.lastDate = dateToString(_appointmentDate);
+        client.lastDate = _appointmentDate.toIso8601String();
         client.nextDate = client.quaterRate? _appointmentDate.add(new Duration(days: 90)).toString(): _appointmentDate.add(new Duration(days: 30)).toString();
         client.prevCopyCount = client.newCopyCount;
         client.prevColorCopyCount = client.newColorCopyCount;

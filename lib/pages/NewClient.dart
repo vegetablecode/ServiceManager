@@ -249,7 +249,7 @@ class NewClientState extends State<NewClientWidget> {
           type: TextInputType.numberWithOptions(signed: false, decimal: true),
         ),
         new MyCard(
-          label: "Początkowy stan licznika (czb): ",
+          label: "Początkowy stan licznika (kolor): ",
           controller: initialColorCounter,
           type: TextInputType.numberWithOptions(signed: false, decimal: false),
         ),
