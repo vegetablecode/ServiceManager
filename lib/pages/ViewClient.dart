@@ -184,20 +184,21 @@ class ViewClientState extends State<ViewClientWidget> {
   }
 
   double getPriceOfAddCopies() {
-    int bwCopies = ((client.newCopyCount-client.prevCopyCount)-client.freeCopies);
-    int colorCopies = ((client.newColorCopyCount-client.prevColorCopyCount)-client.colorFreeCopies);
+    int bwCopies = getOverCopies();
+    int colorCopies = getOverColorCopies();
     var bwPrice = bwCopies*client.pagePrice;
     var colorPrice = colorCopies*client.colorPagePrice;
-    var totalPrice = ((bwPrice<0.0)? bwPrice: 0.0) + ((colorPrice<0.0)? colorPrice: 0.0);
-    return totalPrice;
+    return bwPrice+colorPrice;
   }
 
   int getOverCopies() {
-    return ((client.newCopyCount-client.prevCopyCount)-client.freeCopies);
+    int copies = ((client.newCopyCount-client.prevCopyCount)-client.freeCopies);
+    return (copies<=0)? 0: copies;
   }
 
   int getOverColorCopies() {
-    return ((client.newColorCopyCount-client.prevColorCopyCount)-client.colorFreeCopies);
+    int copies = ((client.newColorCopyCount-client.prevColorCopyCount)-client.colorFreeCopies);
+    return (copies<=0)? 0: copies;
   }
 
   void updateClient() {
@@ -481,10 +482,21 @@ class ViewClientState extends State<ViewClientWidget> {
                       new Padding(padding: new EdgeInsets.only(bottom: 5.0)),
                       new Row(
                         children: <Widget>[
-                          new Text("Liczba kopii ponad stan: "),
+                          new Text("Liczba cz-b kopii ponad stan: "),
                           new Padding(padding: new EdgeInsets.only(left: 5.0)),
                           new Text(
                             getOverCopies().toString(),
+                            style: new TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      ),
+                      new Padding(padding: new EdgeInsets.only(bottom: 5.0)),
+                      new Row(
+                        children: <Widget>[
+                          new Text("Liczba kolorowych kopii ponad stan: "),
+                          new Padding(padding: new EdgeInsets.only(left: 5.0)),
+                          new Text(
+                            getOverColorCopies().toString(),
                             style: new TextStyle(fontWeight: FontWeight.bold),
                           ),
                         ],
