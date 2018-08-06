@@ -212,6 +212,7 @@ class ClientsState extends State<ClientsWidget> {
         0,
         0,
         false,
+        false,
         false);
     if (fileContent != null) {
       client = Client.fromJson(fileContent);

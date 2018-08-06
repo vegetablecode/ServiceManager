@@ -132,6 +132,7 @@ class NewClientState extends State<NewClientWidget> {
             int.tryParse(initialCounter.text) ?? 0,
             int.tryParse(initialColorCounter.text) ?? 0,
             false,
+            false,
             false);
         tomek.display();
         print("client has been created");
@@ -196,6 +197,14 @@ class NewClientState extends State<NewClientWidget> {
     if (this.mounted) {
       setState(() {
         printerLease = value;
+      });
+    }
+  }
+
+  void serviceAgreementChanged(bool value) {
+    if(this.mounted) {
+      setState(() {
+        quaterRate = true;        
       });
     }
   }
@@ -368,6 +377,24 @@ class NewClientState extends State<NewClientWidget> {
               new Row(
                 children: <Widget>[
                   new Text("Dzierżawa kserokopiarki:"),
+                  new Checkbox(
+                    value: printerLease,
+                    onChanged: (bool value) {
+                      printerLeaseChanged(value);
+                    },
+                  )
+                ],
+              )
+            ],
+          ),
+        ),
+        new Container(
+          padding: new EdgeInsets.all(2.0),
+          child: new Column(
+            children: <Widget>[
+              new Row(
+                children: <Widget>[
+                  new Text("Umowa serwisowa:"),
                   new Checkbox(
                     value: printerLease,
                     onChanged: (bool value) {

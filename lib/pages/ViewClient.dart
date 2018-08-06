@@ -78,6 +78,7 @@ class ViewClientState extends State<ViewClientWidget> {
         0,
         0,
         false,
+        false,
         false);
     getApplicationDocumentsDirectory().then((Directory directory) {
       dir = directory;
@@ -266,7 +267,8 @@ class ViewClientState extends State<ViewClientWidget> {
         client.prevCopyCount,
         client.prevColorCopyCount,
         client.copiesLimitReached,
-        client.isInvoicePaid);
+        client.isInvoicePaid,
+        client.serviceAgreement);
 
     Map<String, dynamic> updatedMap = {name: updatedClient.toJson()};
     writeToFile(updatedMap);
