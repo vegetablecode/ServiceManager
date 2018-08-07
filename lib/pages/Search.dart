@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:elbiserwis/styles/MyColors.dart';
 import './ViewClient.dart' as viewClient;
+import './ViewNonAgreementClient.dart' as viewNonAgreementClient;
 import 'package:material_search/material_search.dart';
 import 'dart:io';
 import 'dart:convert';
 import 'package:path_provider/path_provider.dart';
+import 'package:elbiserwis/Client.dart';
 
 class Search extends StatelessWidget {
   var clientList;
@@ -43,21 +45,44 @@ class SearchState extends State<SearchWidget> {
   Map<String, dynamic> fileContent;
 
   // move to ViewClient page
-  void view(String name) {
+void view(String name) {
+  bool noAgreement = isClientNonAgreement(name);
+
     if (this.mounted) {
-      setState(() {
-        print(name);
-        Navigator
-            .push(
-          context,
-          MaterialPageRoute(builder: (context) => viewClient.ViewClient(name)),
-        )
-            .then((value) {
-          setState(() {
-            reloadState();
+      if (noAgreement == false) {
+        setState(() {
+          print(name);
+          Navigator
+              .push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => viewClient.ViewClient(name)),
+          )
+              .then((value) {
+            setState(() {
+              print("back from: " + name);
+              reloadState();
+            });
           });
         });
-      });
+      } else {
+        setState(() {
+          print(name);
+          Navigator
+              .push(
+            context,
+            MaterialPageRoute(
+                builder: (context) =>
+                    viewNonAgreementClient.ViewNonAgreementClient(name)),
+          )
+              .then((value) {
+            setState(() {
+              print("back from: " + name);
+              reloadState();
+            });
+          });
+        });
+      }
     }
   }
 
@@ -81,6 +106,14 @@ class SearchState extends State<SearchWidget> {
         if (clientList != null) _names = clientList;
       }
     });
+  }
+
+  bool isClientNonAgreement(String name) {
+    bool status = false;
+    if(fileContent != null) {
+      status = Client.fromJson(fileContent[name]).noAgreement;
+    }
+    return status;
   }
 
   /*
