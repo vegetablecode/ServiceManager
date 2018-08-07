@@ -268,7 +268,7 @@ class ViewClientState extends State<ViewClientWidget> {
         client.prevColorCopyCount,
         client.copiesLimitReached,
         client.isInvoicePaid,
-        client.serviceAgreement);
+        client.noAgreement);
 
     Map<String, dynamic> updatedMap = {name: updatedClient.toJson()};
     writeToFile(updatedMap);

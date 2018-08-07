@@ -19,7 +19,7 @@ class Client {
   var prevColorCopyCount = 0;
   var copiesLimitReached = false;
   var isInvoicePaid = false;
-  var serviceAgreement = false;
+  var noAgreement = false;
 
   String beginDate = ""; // data poczatku umowy
   String lastDate = ""; // ostatni termin wizyty
@@ -57,7 +57,7 @@ class Client {
       this.prevColorCopyCount,
       this.copiesLimitReached,
       this.isInvoicePaid,
-      this.serviceAgreement);
+      this.noAgreement);
 
   Client.fromJson(Map<String, dynamic> json)
       : nip = json['nip'],
@@ -84,7 +84,7 @@ class Client {
         prevColorCopyCount = json['prevColorCopyCount'],
         copiesLimitReached = json['copiesLimitReached'],
         isInvoicePaid = json['isInvoicePaid'],
-        serviceAgreement = json['serviceAgreement'];
+        noAgreement = json['noAgreement'];
 
   Map<String, dynamic> toJson() => {
         'nip': nip,
@@ -111,7 +111,7 @@ class Client {
         'prevColorCopyCount': prevColorCopyCount,
         'copiesLimitReached': copiesLimitReached,
         'isInvoicePaid': isInvoicePaid,
-        'serviceAgreement': serviceAgreement
+        'noAgreement': noAgreement
       };
 
   // debug
