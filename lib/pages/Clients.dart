@@ -5,6 +5,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:elbiserwis/styles/MyColors.dart';
 import 'package:elbiserwis/Client.dart';
 import './ViewClient.dart' as viewClient;
+import './ViewNonAgreementClient.dart' as viewNonAgreementClient;
 import './Search.dart' as searchClient;
 
 class Clients extends StatelessWidget {
@@ -31,6 +32,7 @@ class ClientsState extends State<ClientsWidget> {
   var clientList;
   List<Client> clients = new List();
   List<bool> invoiceStatuses = new List();
+  List<bool> agreementTypes = new List();
 
   // JSON create & read
   @override
@@ -48,6 +50,7 @@ class ClientsState extends State<ClientsWidget> {
           clients.add(getClient(fileContent[clientList[i]]));
         }
         invoiceStatuses = getInvoicesStatuses(clients);
+        agreementTypes = getAgreementTypes(clients);
       }
     });
   }
@@ -61,7 +64,7 @@ class ClientsState extends State<ClientsWidget> {
         this.setState(
             () => fileContent = JSON.decode(jsonFile.readAsStringSync()));
         clientList = fileContent.keys.toList();
-        
+
         // update clients
         List<Client> newList = new List();
         for (int i = 0; i < fileContent.length; i++) {
@@ -73,22 +76,42 @@ class ClientsState extends State<ClientsWidget> {
     });
   }
 
-  void view(String name) {
+  void view(String name, bool noAgreement) {
     if (this.mounted) {
-      setState(() {
-        print(name);
-        Navigator
-            .push(
-          context,
-          MaterialPageRoute(builder: (context) => viewClient.ViewClient(name)),
-        )
-            .then((value) {
-          setState(() {
-            print("back from: " + name);
-            reloadState();
+      if (noAgreement == false) {
+        setState(() {
+          print(name);
+          Navigator
+              .push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => viewClient.ViewClient(name)),
+          )
+              .then((value) {
+            setState(() {
+              print("back from: " + name);
+              reloadState();
+            });
           });
         });
-      });
+      } else {
+        setState(() {
+          print(name);
+          Navigator
+              .push(
+            context,
+            MaterialPageRoute(
+                builder: (context) =>
+                    viewNonAgreementClient.ViewNonAgreementClient(name)),
+          )
+              .then((value) {
+            setState(() {
+              print("back from: " + name);
+              reloadState();
+            });
+          });
+        });
+      }
     }
   }
 
@@ -132,13 +155,18 @@ class ClientsState extends State<ClientsWidget> {
                           new Padding(
                             padding: EdgeInsets.only(left: 5.0),
                           ),
-                          new Icon(
-                            Icons.date_range,
-                            color: getDateColor(getNextDates(clients)[index])
-                          ),
+                          new Icon(Icons.date_range,
+                              color:
+                                  getDateColor(getNextDates(clients)[index])),
                           new Icon(
                             Icons.monetization_on,
-                            color: getInvoicesStatuses(clients)[index]? MyColors.greenStatus: MyColors.redStatus,
+                            color: getInvoicesStatuses(clients)[index]
+                                ? MyColors.greenStatus
+                                : MyColors.redStatus,
+                          ),
+                          new Icon(
+                            getAgreementTypes(clients)[index]? Icons.build :Icons.settings,
+                            color: MyColors.gray,
                           ),
                           new Padding(
                             padding: EdgeInsets.only(left: 5.0),
@@ -150,7 +178,8 @@ class ClientsState extends State<ClientsWidget> {
                         icon: new Icon(Icons.remove_red_eye),
                         color: Colors.blueAccent,
                         onPressed: () {
-                          view(clientList[index]);
+                          view(clientList[index],
+                              getAgreementTypes(clients)[index]);
                         },
                       )
                     ],
@@ -170,21 +199,33 @@ class ClientsState extends State<ClientsWidget> {
   List<String> getNextDates(List<Client> clients) {
     List<String> dates = new List();
     if (clients != null) {
-      for (int i = 0; i < clients.length; i++)
-        dates.add(clients[i].nextDate);
+      for (int i = 0; i < clients.length; i++) dates.add(clients[i].nextDate);
     }
     return dates;
+  }
+
+/* noAgreement
+ * true -> client has no agreement
+ * false ->  client has service agreement */
+  List<bool> getAgreementTypes(List<Client> clients) {
+    List<bool> agreementTypes = new List();
+    if (clients != null) {
+      for (int i = 0; i < clients.length; i++)
+        agreementTypes.add(clients[i].noAgreement);
+    }
+    return agreementTypes;
   }
 
   Color getDateColor(String date) {
     DateTime now = DateTime.now();
     DateTime inFiveDays = now.add(new Duration(days: 5));
     DateTime nextDate = DateTime.parse(date);
-    if(nextDate.isBefore(now))
+    if (nextDate.isBefore(now))
       return MyColors.redStatus;
-    else if(nextDate.isBefore(inFiveDays))
+    else if (nextDate.isBefore(inFiveDays))
       return MyColors.yellowStatus;
-    else return MyColors.greenStatus;
+    else
+      return MyColors.greenStatus;
   }
 
   Client getClient(Map<String, dynamic> fileContent) {

@@ -15,4 +15,5 @@ class MyColors {
   static const redStatus = const Color(0xFFF06659);
   static const yellowStatus = const Color(0xFFE5B840);
   static const greenStatus = const Color(0xFF00B250);
+  static const gray = const Color(0xFF403E3E);
 }

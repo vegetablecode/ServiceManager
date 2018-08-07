@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:elbiserwis/styles/MyColors.dart';
 import './NewAgreementClient.dart' as newAgreementClient;
+import './NewNonAgreementClient.dart' as newNonAgreementClient;
 
 class NewClient extends StatelessWidget {
   @override
@@ -24,6 +25,18 @@ class NewClientState extends State<NewClientWidget> {
           context,
           MaterialPageRoute(
               builder: (context) => newAgreementClient.NewAgreementClient()),
+        );
+      });
+    }
+  }
+
+  void openNewNonAgreementClient() {
+    if (this.mounted) {
+      setState(() {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => newNonAgreementClient.NewNonAgreementClient()),
         );
       });
     }
@@ -75,7 +88,7 @@ class NewClientState extends State<NewClientWidget> {
                               new IconButton(
                                 icon: new Icon(Icons.add_box,
                                     size: 40.0, color: MyColors.flatButtonFill),
-                                onPressed: null,
+                                onPressed: openNewNonAgreementClient,
                               )
                             ],
                           ),
