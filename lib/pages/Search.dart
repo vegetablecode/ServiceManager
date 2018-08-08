@@ -45,9 +45,7 @@ class SearchState extends State<SearchWidget> {
   Map<String, dynamic> fileContent;
 
   // move to ViewClient page
-void view(String name) {
-  bool noAgreement = isClientNonAgreement(name);
-
+  void view(String name, bool noAgreement) {
     if (this.mounted) {
       if (noAgreement == false) {
         setState(() {
@@ -90,6 +88,7 @@ void view(String name) {
   @override
   void initState() {
     super.initState();
+    reloadState();
     if (clientList != null) _names = clientList;
   }
 
@@ -109,8 +108,8 @@ void view(String name) {
   }
 
   bool isClientNonAgreement(String name) {
-    bool status = false;
-    if(fileContent != null) {
+    bool status;
+    if (fileContent != null) {
       status = Client.fromJson(fileContent[name]).noAgreement;
     }
     return status;
@@ -128,8 +127,7 @@ void view(String name) {
       appBar: new AppBar(
         backgroundColor: MyColors.tabBar,
         title: new Text("Wyszukiwanie klientów"),
-        actions: <Widget>[
-        ],
+        actions: <Widget>[],
       ),
       body: new Center(
         child: new Column(
@@ -162,7 +160,8 @@ void view(String name) {
                       onSelect: (dynamic v) {
                         print(v);
                         if (clientList != null) _names = clientList;
-                        view(v);
+                        bool noAgreement = isClientNonAgreement(v);
+                        view(v, noAgreement);
                       },
                       validator: (dynamic value) =>
                           value == null ? 'Required field' : null,
@@ -176,5 +175,38 @@ void view(String name) {
         ),
       ),
     );
+  }
+
+  Client getClient(Map<String, dynamic> fileContent) {
+    Client client = new Client(
+        "",
+        0,
+        0,
+        "",
+        0,
+        0.0,
+        true,
+        false,
+        false,
+        0,
+        0.0,
+        DateTime.now().toIso8601String(),
+        DateTime.now().toIso8601String(),
+        DateTime.now().toIso8601String(),
+        "",
+        null,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        false,
+        false,
+        false);
+    if (fileContent != null) {
+      client = Client.fromJson(fileContent);
+    }
+    return client;
   }
 }
