@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "464666147744",
+    "firebase_url": "https://elbiserwis-42e05.firebaseio.com",
+    "project_id": "elbiserwis-42e05",
+    "storage_bucket": "elbiserwis-42e05.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:464666147744:android:9ce337eeb8932b61",
+        "android_client_info": {
+          "package_name": "com.example.elbiserwis"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "464666147744-bmus0b7n7ocir1kt11nr4nbpfqur0ap9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD0mXJcQMFFKzuQZnPw1MXqNH5H-xvj6qE"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
