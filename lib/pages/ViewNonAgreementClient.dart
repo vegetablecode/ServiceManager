@@ -5,6 +5,7 @@ import 'package:elbiserwis/styles/MyColors.dart';
 import 'dart:io';
 import 'dart:async';
 import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 class ViewNonAgreementClient extends StatelessWidget {
   String name;
@@ -89,6 +90,15 @@ class ViewNonAgreementClientState extends State<ViewNonAgreementClientWidget> {
       clientList = fileContent.keys.toList();
       client = Client.fromJson(fileContent[name]);
     });
+  }
+
+  // save to Firebase
+  void saveData(File content) async {
+    var url = "https://elbiserwis-42e05.firebaseio.com/clients.json";
+    var httpClient = http.Client();
+    var removeData = await httpClient.delete(url);
+    var response = await httpClient.post(url, body: JSON.encode(fileContent));
+    print("response=" + response.body);
   }
 
   Future<Null> _selectDate(BuildContext context) async {
@@ -240,6 +250,7 @@ class ViewNonAgreementClientState extends State<ViewNonAgreementClientWidget> {
 
     Map<String, dynamic> updatedMap = {name: updatedClient.toJson()};
     writeToFile(updatedMap);
+    saveData(jsonFile);
   }
 
   @override

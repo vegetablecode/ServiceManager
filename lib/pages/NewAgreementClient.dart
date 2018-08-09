@@ -5,6 +5,7 @@ import 'dart:io';
 import 'dart:convert';
 import 'dart:async';
 import 'package:path_provider/path_provider.dart';
+import 'package:http/http.dart' as http;
 
 class NewAgreementClient extends StatelessWidget {
   @override
@@ -102,6 +103,15 @@ class NewAgreementClientState extends State<NewAgreementClientWidget> {
     this.setState(() => fileContent = JSON.decode(jsonFile.readAsStringSync()));
   }
 
+  // save to Firebase
+  void saveData(File content) async {
+    var url = "https://elbiserwis-42e05.firebaseio.com/clients.json";
+    var httpClient = http.Client();
+    var removeData = await httpClient.delete(url);
+    var response = await httpClient.post(url, body: JSON.encode(fileContent));
+    print("response=" + response.body);
+  }
+
   // switches & buttons
   void onPressed() {
     if (this.mounted) {
@@ -147,6 +157,7 @@ class NewAgreementClientState extends State<NewAgreementClientWidget> {
         // save to the db
         writeToFile(userMap);
       });
+      saveData(jsonFile);
       clientCreatedDialog();
     }
   }

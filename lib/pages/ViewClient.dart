@@ -5,6 +5,7 @@ import 'package:elbiserwis/styles/MyColors.dart';
 import 'dart:io';
 import 'dart:async';
 import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 class ViewClient extends StatelessWidget {
   String name;
@@ -121,6 +122,15 @@ class ViewClientState extends State<ViewClientWidget> {
     createFile(content, dir, fileName);
     this.setState(() => fileContent = JSON.decode(jsonFile.readAsStringSync()));
     print("A new file with data has been created!");
+  }
+
+  // save to Firebase
+  void saveData(File content) async {
+    var url = "https://elbiserwis-42e05.firebaseio.com/clients.json";
+    var httpClient = http.Client();
+    var removeData = await httpClient.delete(url);
+    var response = await httpClient.post(url, body: JSON.encode(fileContent));
+    print("response=" + response.body);
   }
 
   void writeToFile(Map<String, dynamic> content) {
@@ -272,6 +282,7 @@ class ViewClientState extends State<ViewClientWidget> {
 
     Map<String, dynamic> updatedMap = {name: updatedClient.toJson()};
     writeToFile(updatedMap);
+    saveData(jsonFile);
   }
 
   @override

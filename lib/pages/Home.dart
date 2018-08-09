@@ -39,6 +39,7 @@ class HomeState extends State<HomeWidget> {
       if ((fileExist) && (this.mounted))
         this.setState(
             () => fileContent = JSON.decode(jsonFile.readAsStringSync()));
+            loadData();
     });
   }
 
@@ -61,6 +62,7 @@ class HomeState extends State<HomeWidget> {
   void saveData(File content) async {
     var url = "https://elbiserwis-42e05.firebaseio.com/clients.json";
     var httpClient = Client();
+    var removeData = await httpClient.delete(url);
     var response = await httpClient.post(url, body: JSON.encode(fileContent));
     print("response=" + response.body);
   }
@@ -70,7 +72,10 @@ class HomeState extends State<HomeWidget> {
     var url = "https://elbiserwis-42e05.firebaseio.com/clients.json";
     var httpClient = Client();
     var response = await httpClient.get(url);
-    print(response.body);
+    this.setState(
+            () => fileContent = JSON.decode(response.body));
+    var key = fileContent.keys.toList();
+    writeAsNewFile(fileContent[key[0]]);
   }
 
   @override
