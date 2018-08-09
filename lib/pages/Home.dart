@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:elbiserwis/styles/MyColors.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:io';
 import 'dart:convert';
 import 'package:http/http.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 class Home extends StatelessWidget {
   @override
@@ -28,6 +28,8 @@ class HomeState extends State<HomeWidget> {
   bool fileExist = false;
   Map<String, dynamic> fileContent;
 
+  FirebaseMessaging firebaseMessaging = new FirebaseMessaging();
+
   // JSON create & read
   @override
   void initState() {
@@ -41,6 +43,20 @@ class HomeState extends State<HomeWidget> {
             () => fileContent = JSON.decode(jsonFile.readAsStringSync()));
             loadData();
     });
+    /*firebaseMessaging.configure(
+      onMessage: (Map<String, dynamic> message){
+        print(message);
+      },
+      onResume: (Map<String, dynamic> message){
+        print(message);
+      },
+      onLaunch: (Map<String, dynamic> message){
+        print(message);
+      },
+    );
+    firebaseMessaging.getToken().then((token){
+      print(token);
+    });*/
   }
 
   void createFile(
@@ -103,18 +119,6 @@ class HomeState extends State<HomeWidget> {
                     "elbiSerwis",
                     style: new TextStyle(fontSize: 20.0),
                   ),
-                  new RaisedButton(
-                    child: new Text("cumon"),
-                    onPressed: () {
-                      saveData(jsonFile);
-                    },
-                  ),
-                  new RaisedButton(
-                    child: new Text("pobierz"),
-                    onPressed: () {
-                      loadData();
-                    },
-                  )
                 ],
               ),
             )),
@@ -122,23 +126,4 @@ class HomeState extends State<HomeWidget> {
     );
   }
 
-  /*@override
-  Widget build(BuildContext context) {
-    return new Scaffold(
-      appBar: new AppBar(title: new Text("firebase")),
-      body: new StreamBuilder(
-          stream: Firestore.instance.collection('baby').snapshots(),
-          builder: (context, snapshot) {
-            if (!snapshot.hasData) return const Text('Loading...');
-            return new ListView.builder(
-                itemCount: snapshot.data.documents.length,
-                padding: const EdgeInsets.only(top: 10.0),
-                itemExtent: 25.0,
-                itemBuilder: (context, index) {
-                  DocumentSnapshot ds = snapshot.data.documents[index];
-                  return new Text(" ${ds['name']} ${ds['votes']}");
-                });
-          }),
-    );
-  }*/
 }
