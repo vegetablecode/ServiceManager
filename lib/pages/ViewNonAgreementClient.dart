@@ -129,6 +129,7 @@ class ViewNonAgreementClientState extends State<ViewNonAgreementClientWidget> {
   void writeAsNewFile(Map<String, dynamic> content) {
     createFile(content, dir, fileName);
     this.setState(() => fileContent = JSON.decode(jsonFile.readAsStringSync()));
+    saveData(jsonFile);
     print("A new file with data has been created!");
   }
 
@@ -366,14 +367,14 @@ class ViewNonAgreementClientState extends State<ViewNonAgreementClientWidget> {
                           new Text("Status faktury: "),
                           new Padding(padding: new EdgeInsets.only(left: 5.0)),
                           new Text(
-                            (client.isInvoicePaid)? "opłacona": "nieopłacona",
+                            (client.isInvoicePaid)? "wystawiona": "niewystawiona",
                             style: new TextStyle(fontWeight: FontWeight.bold),
                           ),
                         ],
                       ),
                       new Padding(padding: new EdgeInsets.only(bottom: 5.0)),
                       new RaisedButton(
-                        child: new Text(client.isInvoicePaid? "cofnij wpłatę!": "zapłać!"),
+                        child: new Text(client.isInvoicePaid? "cofnij fakturę!": "wystaw fakturę!"),
                         color: client.isInvoicePaid? MyColors.greenButton: MyColors.flatButtonFill,
                         onPressed: changePaymentStatus,
                       )

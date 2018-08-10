@@ -67,7 +67,7 @@ class ReportsState extends State<ReportsWidget> {
                     child: new Column(
                       children: <Widget>[
                         new Text(
-                          clientList[index],
+                          clientList[taskIndexes[index]],
                           style: new TextStyle(fontSize: 20.0),
                         ),
                         new Padding(

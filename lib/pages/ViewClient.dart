@@ -1,4 +1,5 @@
 import 'package:elbiserwis/Client.dart';
+import 'package:elbiserwis/pages/MonthSummary.dart' as monthSummary;
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:elbiserwis/styles/MyColors.dart';
@@ -121,6 +122,7 @@ class ViewClientState extends State<ViewClientWidget> {
   void writeAsNewFile(Map<String, dynamic> content) {
     createFile(content, dir, fileName);
     this.setState(() => fileContent = JSON.decode(jsonFile.readAsStringSync()));
+    saveData(jsonFile);
     print("A new file with data has been created!");
   }
 
@@ -220,13 +222,26 @@ class ViewClientState extends State<ViewClientWidget> {
     updateClient();
   }
 
-  void changePaymentStatus() {
-    if(this.mounted){
+  void openSummary(String name, Client client) {
+    if (this.mounted) {
       setState(() {
-              if(client.isInvoicePaid == true)
-                client.isInvoicePaid = false;
-                else client.isInvoicePaid = true;
-            });
+        print(name);
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => monthSummary.MonthSummary(name, client)),
+        );
+      });
+    }
+  }
+
+  void changePaymentStatus() {
+    if (this.mounted) {
+      setState(() {
+        if (client.isInvoicePaid == true)
+          client.isInvoicePaid = false;
+        else
+          client.isInvoicePaid = true;
+      });
       updateClient();
     }
   }
@@ -576,16 +591,28 @@ class ViewClientState extends State<ViewClientWidget> {
                           new Text("Status faktury: "),
                           new Padding(padding: new EdgeInsets.only(left: 5.0)),
                           new Text(
-                            (client.isInvoicePaid)? "opłacona": "nieopłacona",
+                            (client.isInvoicePaid)
+                                ? "wystawiona"
+                                : "niewystawiona",
                             style: new TextStyle(fontWeight: FontWeight.bold),
                           ),
                         ],
                       ),
                       new Padding(padding: new EdgeInsets.only(bottom: 5.0)),
                       new RaisedButton(
-                        child: new Text(client.isInvoicePaid? "cofnij wpłatę!": "zapłać!"),
-                        color: client.isInvoicePaid? MyColors.greenButton: MyColors.flatButtonFill,
+                        child: new Text(client.isInvoicePaid
+                            ? "cofnij fakturę!"
+                            : "wystaw fakturę!"),
+                        color: client.isInvoicePaid
+                            ? MyColors.greenButton
+                            : MyColors.flatButtonFill,
                         onPressed: changePaymentStatus,
+                      ),
+                      new Padding(padding: new EdgeInsets.only(bottom: 5.0)),
+                      new RaisedButton(
+                        child: new Text("zobacz raport"),
+                        color: MyColors.noTask,
+                        onPressed: (){openSummary(name, client);},
                       )
                     ],
                   ),
