@@ -66,132 +66,258 @@ class MonthSummaryState extends State<MonthSummaryWidget> {
       ),
       backgroundColor: MyColors.background,
       body: new Center(
-        child: new Container(
-          padding: EdgeInsets.all(5.0),
-          child: new Card(
-              color: MyColors.card,
-              child: new Container(
-                padding: EdgeInsets.all(5.0),
-                child: new Column(
-                  children: <Widget>[
-                    new Text(
-                      "Informacje o umowie",
-                      style: new TextStyle(fontSize: 20.0),
-                    ),
-                    new Padding(padding: new EdgeInsets.only(bottom: 20.0)),
-                    new Row(
-                      children: <Widget>[
-                        new Text("Klient: "),
-                        new Padding(padding: new EdgeInsets.only(left: 5.0)),
-                        new Text(
-                          name,
-                          style: new TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                      ],
-                    ),
-                    new Padding(padding: new EdgeInsets.only(bottom: 5.0)),
-                    new Row(
-                      children: <Widget>[
-                        new Text("Data rozpoczęcia umowy: "),
-                        new Padding(padding: new EdgeInsets.only(left: 5.0)),
-                        new Text(
-                          dateToString(DateTime.parse(client.beginDate)),
-                          style: new TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                      ],
-                    ),
-                    new Padding(padding: new EdgeInsets.only(bottom: 5.0)),
-                    new Row(
-                      children: <Widget>[
-                        new Text("Data ostatniego rozliczenia: "),
-                        new Padding(padding: new EdgeInsets.only(left: 5.0)),
-                        new Text(
-                          dateToString(DateTime.parse(client.lastDate)),
-                          style: new TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                      ],
-                    ),
-                    new Padding(padding: new EdgeInsets.only(bottom: 5.0)),
-                    new Row(
-                      children: <Widget>[
-                        new Text("Data kolejnego rozliczenia: "),
-                        new Padding(padding: new EdgeInsets.only(left: 5.0)),
-                        new Text(
-                          dateToString(DateTime.parse(client.nextDate)),
-                          style: new TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                      ],
-                    ),
-                    new Padding(padding: new EdgeInsets.only(bottom: 20.0)),
-                     new Text(
-                      "Ceny",
-                      style: new TextStyle(fontSize: 20.0),
-                    ),
-                    new Padding(padding: new EdgeInsets.only(bottom: 20.0)),
-                    new Padding(padding: new EdgeInsets.only(bottom: 20.0)),
-                    new Text(
-                      "Rozliczenie",
-                      style: new TextStyle(fontSize: 20.0),
-                    ),
-                    new Padding(padding: new EdgeInsets.only(bottom: 20.0)),
-                    new Row(
-                      children: <Widget>[
-                        new Text("Liczba cz-b kopii ponad stan: "),
-                        new Padding(padding: new EdgeInsets.only(left: 5.0)),
-                        new Text(
-                          getOverCopies().toString(),
-                          style: new TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                      ],
-                    ),
-                    new Padding(padding: new EdgeInsets.only(bottom: 5.0)),
-                    new Row(
-                      children: <Widget>[
-                        new Text("Liczba kolorowych kopii ponad stan: "),
-                        new Padding(padding: new EdgeInsets.only(left: 5.0)),
-                        new Text(
-                          getOverColorCopies().toString(),
-                          style: new TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                      ],
-                    ),
-                    new Padding(padding: new EdgeInsets.only(bottom: 5.0)),
-                    new Row(
-                      children: <Widget>[
-                        new Text("Dodatkowo do zapłaty w tym miesiącu: "),
-                        new Padding(padding: new EdgeInsets.only(left: 5.0)),
-                        new Text(
-                          getPriceOfAddCopies().toString(),
-                          style: new TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        new Padding(padding: new EdgeInsets.only(left: 5.0)),
-                        new Text(
-                          "zł",
-                          style: new TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                      ],
-                    ),
-                    new Padding(padding: new EdgeInsets.only(bottom: 5.0)),
-                    new Row(
-                      children: <Widget>[
-                        new Text("Dodatkowo do zapłaty w tym miesiącu: "),
-                        new Padding(padding: new EdgeInsets.only(left: 5.0)),
-                        new Text(
-                          getPriceOfAddCopies().toString(),
-                          style: new TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        new Padding(padding: new EdgeInsets.only(left: 5.0)),
-                        new Text(
-                          "zł",
-                          style: new TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              )),
-        ),
-      ),
+          child: new ListView(
+        children: <Widget>[
+          new Container(
+            padding: EdgeInsets.all(5.0),
+            child: new Card(
+                color: MyColors.card,
+                child: new Container(
+                  padding: EdgeInsets.all(5.0),
+                  child: new Column(
+                    children: <Widget>[
+                      new Text(
+                        "Informacje o umowie",
+                        style: new TextStyle(fontSize: 20.0),
+                      ),
+                      new Padding(padding: new EdgeInsets.only(bottom: 20.0)),
+                      new Row(
+                        children: <Widget>[
+                          new Text("Klient: "),
+                          new Padding(padding: new EdgeInsets.only(left: 5.0)),
+                          new Text(
+                            name,
+                            style: new TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      ),
+                      new Padding(padding: new EdgeInsets.only(bottom: 5.0)),
+                      new Row(
+                        children: <Widget>[
+                          new Text("Data ostatniego rozliczenia: "),
+                          new Padding(padding: new EdgeInsets.only(left: 5.0)),
+                          new Text(
+                            dateToString(DateTime.parse(client.lastDate)),
+                            style: new TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      ),
+                      new Padding(padding: new EdgeInsets.only(bottom: 5.0)),
+                      new Row(
+                        children: <Widget>[
+                          new Text("Data kolejnego rozliczenia: "),
+                          new Padding(padding: new EdgeInsets.only(left: 5.0)),
+                          new Text(
+                            dateToString(DateTime.parse(client.nextDate)),
+                            style: new TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      ),
+                      new Padding(padding: new EdgeInsets.only(bottom: 5.0)),
+                      new Row(
+                        children: <Widget>[
+                          new Text("Początkowy stan licznika (cz-b): "),
+                          new Padding(padding: new EdgeInsets.only(left: 5.0)),
+                          new Text(
+                            client.initialCopies.toString(),
+                            style: new TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      ),
+                      new Padding(padding: new EdgeInsets.only(bottom: 5.0)),
+                      new Row(
+                        children: <Widget>[
+                          new Text("Początkowy stan licznika (kolor): "),
+                          new Padding(padding: new EdgeInsets.only(left: 5.0)),
+                          new Text(
+                            client.initialColorCopies.toString(),
+                            style: new TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      ),
+                      new Padding(padding: new EdgeInsets.only(bottom: 5.0)),
+                      new Padding(padding: new EdgeInsets.only(bottom: 20.0)),
+                      new Text(
+                        "Liczniki",
+                        style: new TextStyle(fontSize: 20.0),
+                      ),
+                      new Padding(padding: new EdgeInsets.only(bottom: 20.0)),
+                      new Row(
+                        children: <Widget>[
+                          new Text("Poprzedni stan licznika (cz-b): "),
+                          new Padding(padding: new EdgeInsets.only(left: 5.0)),
+                          new Text(
+                            client.prevCopyCount.toString(),
+                            style: new TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      ),
+                      new Padding(padding: new EdgeInsets.only(bottom: 5.0)),
+                      new Row(
+                        children: <Widget>[
+                          new Text("Poprzedni stan licznika (kolor): "),
+                          new Padding(padding: new EdgeInsets.only(left: 5.0)),
+                          new Text(
+                            client.prevColorCopyCount.toString(),
+                            style: new TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      ),
+                      new Padding(padding: new EdgeInsets.only(bottom: 5.0)),
+                      new Row(
+                        children: <Widget>[
+                          new Text("Aktualny stan licznika (cz-b): "),
+                          new Padding(padding: new EdgeInsets.only(left: 5.0)),
+                          new Text(
+                            client.newCopyCount.toString(),
+                            style: new TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      ),
+                      new Padding(padding: new EdgeInsets.only(bottom: 5.0)),
+                      new Row(
+                        children: <Widget>[
+                          new Text("Aktualny stan licznika (kolor): "),
+                          new Padding(padding: new EdgeInsets.only(left: 5.0)),
+                          new Text(
+                            client.newColorCopyCount.toString(),
+                            style: new TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      ),
+                      new Padding(padding: new EdgeInsets.only(bottom: 5.0)),
+                      new Row(
+                        children: <Widget>[
+                          new Text("Darmowe kopie czarno-białe: "),
+                          new Padding(padding: new EdgeInsets.only(left: 5.0)),
+                          new Text(
+                            client.freeCopies.toString(),
+                            style: new TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          new Padding(padding: new EdgeInsets.only(left: 5.0)),
+                          new Text("szt.")
+                        ],
+                      ),
+                      new Padding(padding: new EdgeInsets.only(bottom: 5.0)),
+                      new Row(
+                        children: <Widget>[
+                          new Text("Darmowe kopie kolorowe: "),
+                          new Padding(padding: new EdgeInsets.only(left: 5.0)),
+                          new Text(
+                            client.colorFreeCopies.toString(),
+                            style: new TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          new Padding(padding: new EdgeInsets.only(left: 5.0)),
+                          new Text("szt.")
+                        ],
+                      ),
+                      new Padding(padding: new EdgeInsets.only(bottom: 20.0)),
+                      new Text(
+                        "Rozliczenie",
+                        style: new TextStyle(fontSize: 20.0),
+                      ),
+                      new Padding(padding: new EdgeInsets.only(bottom: 20.0)),
+                      new Row(
+                        children: <Widget>[
+                          new Text("Liczba cz-b kopii powyżej limitu: "),
+                          new Padding(padding: new EdgeInsets.only(left: 5.0)),
+                          new Text(
+                            getOverCopies().toString(),
+                            style: new TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      ),
+                      new Padding(padding: new EdgeInsets.only(bottom: 5.0)),
+                      new Row(
+                        children: <Widget>[
+                          new Text("Liczba kolorowych kopii powyżej limitu: "),
+                          new Padding(padding: new EdgeInsets.only(left: 5.0)),
+                          new Text(
+                            getOverColorCopies().toString(),
+                            style: new TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      ),
+                      new Padding(padding: new EdgeInsets.only(bottom: 5.0)),
+                      new Row(
+                        children: <Widget>[
+                          new Text("Cena za stronę (cz-b): "),
+                          new Padding(padding: new EdgeInsets.only(left: 5.0)),
+                          new Text(
+                            client.pagePrice.toString(),
+                            style: new TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          new Padding(padding: new EdgeInsets.only(left: 5.0)),
+                          new Text("zł"),
+                        ],
+                      ),
+                      new Padding(padding: new EdgeInsets.only(bottom: 5.0)),
+                      new Row(
+                        children: <Widget>[
+                          new Text("Cena za stronę (kolor): "),
+                          new Padding(padding: new EdgeInsets.only(left: 5.0)),
+                          new Text(
+                            client.colorPagePrice.toString(),
+                            style: new TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          new Padding(padding: new EdgeInsets.only(left: 5.0)),
+                          new Text("zł")
+                        ],
+                      ),
+                      new Padding(padding: new EdgeInsets.only(bottom: 5.0)),
+                      new Row(
+                        children: <Widget>[
+                          new Text("Opłata za kopie powyej limitu (netto): "),
+                          new Padding(padding: new EdgeInsets.only(left: 5.0)),
+                          new Text(
+                            getPriceOfAddCopies().toString(),
+                            style: new TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          new Padding(padding: new EdgeInsets.only(left: 5.0)),
+                          new Text(
+                            "zł",
+                            style: new TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      ),
+                      new Padding(padding: new EdgeInsets.only(bottom: 5.0)),
+                      new Row(
+                        children: <Widget>[
+                          new Text("Opłata za ryczałt (netto): "),
+                          new Padding(padding: new EdgeInsets.only(left: 5.0)),
+                          new Text(
+                            client.rate.toString(),
+                            style: new TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          new Padding(padding: new EdgeInsets.only(left: 5.0)),
+                          new Text(
+                            "zł",
+                            style: new TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      ),
+                      new Padding(padding: new EdgeInsets.only(bottom: 5.0)),
+                      new Row(
+                        children: <Widget>[
+                          new Text("Podsumowanie (netto): "),
+                          new Padding(padding: new EdgeInsets.only(left: 5.0)),
+                          new Text(
+                            (client.rate+getPriceOfAddCopies()).toString(),
+                            style: new TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          new Padding(padding: new EdgeInsets.only(left: 5.0)),
+                          new Text(
+                            "zł",
+                            style: new TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                )),
+          ),
+        ],
+      )),
     );
   }
 }
