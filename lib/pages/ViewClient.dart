@@ -601,8 +601,8 @@ class ViewClientState extends State<ViewClientWidget> {
                       new Padding(padding: new EdgeInsets.only(bottom: 5.0)),
                       new RaisedButton(
                         child: new Text(client.isInvoicePaid
-                            ? "cofnij fakturę!"
-                            : "wystaw fakturę!"),
+                            ? "wystawiono fakturę"
+                            : "faktura do wystawienia"),
                         color: client.isInvoicePaid
                             ? MyColors.greenButton
                             : MyColors.flatButtonFill,

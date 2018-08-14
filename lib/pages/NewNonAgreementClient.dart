@@ -94,7 +94,7 @@ class NewNonAgreementClientState extends State<NewNonAgreementClientWidget> {
         // create a new client
         Client tomek = Client(
             nip.text,
-            int.tryParse(contractPer.text) ?? 0,
+            12,
             int.tryParse(rate.text) ?? 0,
             deviceName.text,
             0,
@@ -214,12 +214,6 @@ class NewNonAgreementClientState extends State<NewNonAgreementClientWidget> {
                 label: "NIP klienta: ",
                 controller: nip,
                 type: TextInputType.text),
-            new MyCard(
-              label: "Okres umowy (w miesiącach): ",
-              controller: contractPer,
-              type: TextInputType.numberWithOptions(
-                  signed: false, decimal: false),
-            ),
             new Padding(padding: new EdgeInsets.only(bottom: 20.0)),
             new Text(
               "Szczegóły umowy",

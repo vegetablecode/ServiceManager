@@ -291,21 +291,6 @@ class ViewNonAgreementClientState extends State<ViewNonAgreementClientWidget> {
                         new Row(
                           children: <Widget>[
                             new Text(
-                              "okres umowy: ",
-                              style: new TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                            new Padding(
-                                padding: new EdgeInsets.only(left: 5.0)),
-                            new Text(client.contractPer.toString()),
-                            new Padding(
-                                padding: new EdgeInsets.only(left: 5.0)),
-                            new Text("miesięcy")
-                          ],
-                        ),
-                        new Padding(padding: new EdgeInsets.only(bottom: 5.0)),
-                        new Row(
-                          children: <Widget>[
-                            new Text(
                               "nazwa urządzenia: ",
                               style: new TextStyle(fontWeight: FontWeight.bold),
                             ),
@@ -374,7 +359,7 @@ class ViewNonAgreementClientState extends State<ViewNonAgreementClientWidget> {
                       ),
                       new Padding(padding: new EdgeInsets.only(bottom: 5.0)),
                       new RaisedButton(
-                        child: new Text(client.isInvoicePaid? "cofnij fakturę!": "wystaw fakturę!"),
+                        child: new Text(client.isInvoicePaid? "wystawiono fakturę": "faktura do wystawienia"),
                         color: client.isInvoicePaid? MyColors.greenButton: MyColors.flatButtonFill,
                         onPressed: changePaymentStatus,
                       )
