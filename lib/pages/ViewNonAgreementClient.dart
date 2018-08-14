@@ -79,7 +79,9 @@ class ViewNonAgreementClientState extends State<ViewNonAgreementClientWidget> {
         0,
         false,
         false,
-        false);
+        false,
+        "",
+        "");
     getApplicationDocumentsDirectory().then((Directory directory) {
       dir = directory;
       jsonFile = new File(dir.path + "/" + fileName);
@@ -247,7 +249,9 @@ class ViewNonAgreementClientState extends State<ViewNonAgreementClientWidget> {
         client.prevColorCopyCount,
         client.copiesLimitReached,
         client.isInvoicePaid,
-        client.noAgreement);
+        client.noAgreement,
+        client.email,
+        client.phone);
 
     Map<String, dynamic> updatedMap = {name: updatedClient.toJson()};
     writeToFile(updatedMap);
@@ -415,7 +419,7 @@ class ViewNonAgreementClientState extends State<ViewNonAgreementClientWidget> {
                       new Padding(padding: new EdgeInsets.only(bottom: 5.0)),
                       new FlatButton(
                         child: new Text(
-                          "Dodaj notatkę!",
+                          "Zapisz wizytę!",
                           style: TextStyle(color: MyColors.flatButton),
                         ),
                         onPressed: addNote,

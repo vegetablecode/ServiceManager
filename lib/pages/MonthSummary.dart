@@ -105,7 +105,7 @@ class MonthSummaryState extends State<MonthSummaryWidget> {
                       new Padding(padding: new EdgeInsets.only(bottom: 5.0)),
                       new Row(
                         children: <Widget>[
-                          new Text("Data kolejnego rozliczenia: "),
+                          new Text("Planowana data kolejnego rozliczenia: "),
                           new Padding(padding: new EdgeInsets.only(left: 5.0)),
                           new Text(
                             dateToString(DateTime.parse(client.nextDate)),
@@ -299,7 +299,7 @@ class MonthSummaryState extends State<MonthSummaryWidget> {
                       new Padding(padding: new EdgeInsets.only(bottom: 5.0)),
                       new Row(
                         children: <Widget>[
-                          new Text("Podsumowanie (netto): "),
+                          new Text("Razem do zapłaty (netto): "),
                           new Padding(padding: new EdgeInsets.only(left: 5.0)),
                           new Text(
                             (client.rate+getPriceOfAddCopies()).toString(),

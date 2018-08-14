@@ -34,6 +34,8 @@ class NewAgreementClientState extends State<NewAgreementClientWidget> {
   TextEditingController colorPagePrice = new TextEditingController();
   TextEditingController initialCounter = new TextEditingController();
   TextEditingController initialColorCounter = new TextEditingController();
+  TextEditingController email = new TextEditingController();
+  TextEditingController phone = new TextEditingController();
   DateTime _beginDate = new DateTime.now();
   String notes = "";
   String tasks = "";
@@ -144,7 +146,9 @@ class NewAgreementClientState extends State<NewAgreementClientWidget> {
             int.tryParse(initialColorCounter.text) ?? 0,
             false,
             false,
-            false);
+            false,
+            email.text,
+            phone.text);
         tomek.display();
         print("client has been created");
 
@@ -273,6 +277,15 @@ class NewAgreementClientState extends State<NewAgreementClientWidget> {
             new MyCard(
                 label: "NIP klienta: ",
                 controller: nip,
+                type: TextInputType.text),
+            new MyCard(
+              label: "E-Mail: ",
+              controller: email,
+              type: TextInputType.text,
+            ),
+            new MyCard(
+                label: "Telefon: ",
+                controller: phone,
                 type: TextInputType.text),
             new MyCard(
               label: "Okres umowy (w miesiącach): ",

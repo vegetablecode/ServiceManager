@@ -29,6 +29,8 @@ class NewNonAgreementClientState extends State<NewNonAgreementClientWidget> {
   TextEditingController rate = new TextEditingController();
   TextEditingController deviceName = new TextEditingController();
   TextEditingController rateTime = new TextEditingController();
+  TextEditingController email = new TextEditingController();
+  TextEditingController phone = new TextEditingController();
   DateTime _beginDate = new DateTime.now();
   String notes = "";
   String tasks = "";
@@ -106,7 +108,9 @@ class NewNonAgreementClientState extends State<NewNonAgreementClientWidget> {
             0.0,
             _beginDate.toIso8601String(),
             _beginDate.toIso8601String(),
-            _beginDate.add(new Duration(days: int.tryParse(rateTime.text)*30?? 90)).toString(),
+            _beginDate
+                .add(new Duration(days: int.tryParse(rateTime.text) * 30 ?? 90))
+                .toString(),
             notes,
             tasks,
             0,
@@ -116,8 +120,10 @@ class NewNonAgreementClientState extends State<NewNonAgreementClientWidget> {
             0,
             0,
             false,
+            false,
             true,
-            true);
+            email.text,
+            phone.text);
         tomek.display();
         print("client has been created");
 
@@ -162,6 +168,7 @@ class NewNonAgreementClientState extends State<NewNonAgreementClientWidget> {
       },
     );
   }
+
   Future<Null> _selectDate(BuildContext context) async {
     final DateTime picked = await showDatePicker(
         context: context,
@@ -213,6 +220,15 @@ class NewNonAgreementClientState extends State<NewNonAgreementClientWidget> {
             new MyCard(
                 label: "NIP klienta: ",
                 controller: nip,
+                type: TextInputType.text),
+            new MyCard(
+              label: "E-Mail: ",
+              controller: email,
+              type: TextInputType.text,
+            ),
+            new MyCard(
+                label: "Telefon: ",
+                controller: phone,
                 type: TextInputType.text),
             new Padding(padding: new EdgeInsets.only(bottom: 20.0)),
             new Text(

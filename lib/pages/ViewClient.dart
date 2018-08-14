@@ -81,7 +81,9 @@ class ViewClientState extends State<ViewClientWidget> {
         0,
         false,
         false,
-        false);
+        false,
+        "",
+        "");
     getApplicationDocumentsDirectory().then((Directory directory) {
       dir = directory;
       jsonFile = new File(dir.path + "/" + fileName);
@@ -293,7 +295,9 @@ class ViewClientState extends State<ViewClientWidget> {
         client.prevColorCopyCount,
         client.copiesLimitReached,
         client.isInvoicePaid,
-        client.noAgreement);
+        client.noAgreement,
+        client.email,
+        client.phone);
 
     Map<String, dynamic> updatedMap = {name: updatedClient.toJson()};
     writeToFile(updatedMap);
@@ -633,7 +637,7 @@ class ViewClientState extends State<ViewClientWidget> {
                       ),
                       new TextField(
                         decoration:
-                            InputDecoration(hintText: 'Dodaj notatkę...'),
+                            InputDecoration(hintText: 'Wpisz notatkę do wizyty...'),
                         controller: note,
                       ),
                       new Padding(padding: new EdgeInsets.only(bottom: 5.0)),
@@ -674,7 +678,7 @@ class ViewClientState extends State<ViewClientWidget> {
                       new Padding(padding: new EdgeInsets.only(bottom: 5.0)),
                       new FlatButton(
                         child: new Text(
-                          "Dodaj notatkę!",
+                          "Zapisz wizytę!",
                           style: TextStyle(color: MyColors.flatButton),
                         ),
                         onPressed: addNote,
