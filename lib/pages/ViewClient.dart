@@ -193,16 +193,12 @@ class ViewClientState extends State<ViewClientWidget> {
   }
 
   void addNote() {
-    if (this.mounted) {
+    if ((this.mounted)&&((counterStatus.text!="")&&(colorCounterStatus.text!=""))) {
       setState(() {
         // add note
         client.notes += dateToString(_appointmentDate);
         client.notes += ": ";
         client.notes += note.text.toString();
-        client.notes += " (licznik: C:";
-        client.notes += counterStatus.text.toString() + ", K:";
-        client.notes += colorCounterStatus.text.toString();
-        client.notes += ")";
         client.notes += '\n';
         print("the note has been added!");
 
@@ -218,10 +214,16 @@ class ViewClientState extends State<ViewClientWidget> {
         client.newColorCopyCount = int.tryParse(colorCounterStatus.text) ?? 0;
         client.copiesLimitReached =
             (getPriceOfAddCopies() > 0.0) ? true : false;
+        
+        // clear the fields
+        note.clear();
+        counterStatus.clear();
+        colorCounterStatus.clear();
+        
+        // save data
+        updateClient();
       });
     }
-
-    updateClient();
   }
 
   void openSummary(String name, Client client) {

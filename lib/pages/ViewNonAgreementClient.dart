@@ -188,7 +188,7 @@ class ViewNonAgreementClientState extends State<ViewNonAgreementClientWidget> {
   }
 
   void addNote() {
-    if (this.mounted) {
+     if ((this.mounted)&&(remindAfter.text!="")) {
       setState(() {
         // add note
         client.notes += dateToString(_appointmentDate);
@@ -208,10 +208,15 @@ class ViewNonAgreementClientState extends State<ViewNonAgreementClientWidget> {
         client.newCopyCount = 0;
         client.newColorCopyCount = 0;
         client.copiesLimitReached = false;
+
+        // clear fields
+        note.clear();
+        remindAfter.clear();
+
+        // save client do json
+        updateClient();
       });
     }
-
-    updateClient();
   }
 
   void changePaymentStatus() {
