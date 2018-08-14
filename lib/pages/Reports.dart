@@ -4,6 +4,9 @@ import 'dart:io';
 import 'dart:convert';
 import 'package:path_provider/path_provider.dart';
 import 'package:elbiserwis/styles/MyColors.dart';
+import './ViewClient.dart' as viewClient;
+import './ViewNonAgreementClient.dart' as viewNonAgreementClient;
+import './Search.dart' as searchClient;
 
 class Reports extends StatelessWidget {
   @override
@@ -30,6 +33,7 @@ class ReportsState extends State<ReportsWidget> {
   var clientList; // the list of client names
   List<Client> clients = new List();
   List<int> taskIndexes = new List();
+  List<bool> agreementTypes = new List();
 
   // JSON create & read
   @override
@@ -49,8 +53,68 @@ class ReportsState extends State<ReportsWidget> {
           clients.add(getClient(fileContent[clientList[i]]));
         }
         taskIndexes = getTaskIndexes(clients);
+        agreementTypes = getAgreementTypes(clients);
       }
     });
+  }
+
+  void reloadState() {
+    getApplicationDocumentsDirectory().then((Directory directory) {
+      dir = directory;
+      jsonFile = new File(dir.path + "/" + fileName);
+      fileExist = jsonFile.existsSync();
+      if ((fileExist) && (this.mounted)) {
+        this.setState(
+            () => fileContent = JSON.decode(jsonFile.readAsStringSync()));
+        clientList = fileContent.keys.toList();
+
+        // update clients
+        List<Client> newList = new List();
+        for (int i = 0; i < fileContent.length; i++) {
+          newList.add(getClient(fileContent[clientList[i]]));
+        }
+        clients = newList;
+      }
+    });
+  }
+
+  void view(String name, bool noAgreement) {
+    if (this.mounted) {
+      if (noAgreement == false) {
+        setState(() {
+          print(name);
+          Navigator
+              .push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => viewClient.ViewClient(name)),
+          )
+              .then((value) {
+            setState(() {
+              print("back from: " + name);
+              reloadState();
+            });
+          });
+        });
+      } else {
+        setState(() {
+          print(name);
+          Navigator
+              .push(
+            context,
+            MaterialPageRoute(
+                builder: (context) =>
+                    viewNonAgreementClient.ViewNonAgreementClient(name)),
+          )
+              .then((value) {
+            setState(() {
+              print("back from: " + name);
+              reloadState();
+            });
+          });
+        });
+      }
+    }
   }
 
   @override
@@ -131,6 +195,17 @@ class ReportsState extends State<ReportsWidget> {
                             ),
                           ),
                         ),
+                        new Padding(
+                          padding: EdgeInsets.only(bottom: 10.0),
+                        ),
+                        new RaisedButton(
+                          color: MyColors.greenButton,
+                          child: new Text("zobacz klienta"),
+                          onPressed: () {
+                            view(clientList[taskIndexes[index]],
+                                getAgreementTypes(clients)[index]);
+                          },
+                        )
                       ],
                     ),
                   ));
@@ -147,6 +222,18 @@ class ReportsState extends State<ReportsWidget> {
     return counter;
   }
 
+/* noAgreement
+ * true -> client has no agreement
+ * false ->  client has service agreement */
+  List<bool> getAgreementTypes(List<Client> clients) {
+    List<bool> agreementTypes = new List();
+    if (clients != null) {
+      for (int i = 0; i < clients.length; i++)
+        agreementTypes.add(clients[i].noAgreement);
+    }
+    return agreementTypes;
+  }
+
   List<int> getTaskIndexes(List<Client> clients) {
     List<int> indexes = new List();
     for (int i = 0; i < clients.length; i++)
@@ -155,8 +242,34 @@ class ReportsState extends State<ReportsWidget> {
   }
 
   Client getClient(Map<String, dynamic> fileContent) {
-    Client client = new Client("", 0, 0, "", 0, 0.0, true, false, false, 0, 0.0,
-        DateTime.now().toIso8601String(), DateTime.now().toIso8601String(), DateTime.now().toIso8601String(), "", null, 0, 0, 0, 0, 0, 0, false, false, false, "", "");
+    Client client = new Client(
+        "",
+        0,
+        0,
+        "",
+        0,
+        0.0,
+        true,
+        false,
+        false,
+        0,
+        0.0,
+        DateTime.now().toIso8601String(),
+        DateTime.now().toIso8601String(),
+        DateTime.now().toIso8601String(),
+        "",
+        null,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        false,
+        false,
+        false,
+        "",
+        "");
     if (fileContent != null) {
       client = Client.fromJson(fileContent);
     }

@@ -341,6 +341,30 @@ class ViewClientState extends State<ViewClientWidget> {
                         new Row(
                           children: <Widget>[
                             new Text(
+                              "E-Mail: ",
+                              style: new TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            new Padding(
+                                padding: new EdgeInsets.only(left: 5.0)),
+                            new Text(client.email),
+                          ],
+                        ),
+                        new Padding(padding: new EdgeInsets.only(bottom: 5.0)),
+                        new Row(
+                          children: <Widget>[
+                            new Text(
+                              "Telefon: ",
+                              style: new TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            new Padding(
+                                padding: new EdgeInsets.only(left: 5.0)),
+                            new Text(client.phone),
+                          ],
+                        ),
+                        new Padding(padding: new EdgeInsets.only(bottom: 5.0)),
+                        new Row(
+                          children: <Widget>[
+                            new Text(
                               "okres umowy: ",
                               style: new TextStyle(fontWeight: FontWeight.bold),
                             ),
@@ -771,7 +795,7 @@ class ViewClientState extends State<ViewClientWidget> {
                       ),
                       new FlatButton(
                         child: new Text(
-                          "Dodaj zadanie!",
+                          "Zapisz zadanie!",
                           style: TextStyle(color: MyColors.flatButton),
                         ),
                         onPressed: addTask,

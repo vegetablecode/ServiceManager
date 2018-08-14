@@ -24,7 +24,8 @@ class ViewNonAgreementClientWidget extends StatefulWidget {
   ViewNonAgreementClientWidget(this.name);
 
   @override
-  ViewNonAgreementClientState createState() => new ViewNonAgreementClientState(name);
+  ViewNonAgreementClientState createState() =>
+      new ViewNonAgreementClientState(name);
 }
 
 class ViewNonAgreementClientState extends State<ViewNonAgreementClientWidget> {
@@ -199,7 +200,9 @@ class ViewNonAgreementClientState extends State<ViewNonAgreementClientWidget> {
         // add dates & update counter
         client.isInvoicePaid = false;
         client.lastDate = _appointmentDate.toIso8601String();
-        client.nextDate = _appointmentDate.add(new Duration(days: int.tryParse(remindAfter.text)*30)).toString();
+        client.nextDate = _appointmentDate
+            .add(new Duration(days: int.tryParse(remindAfter.text) * 30))
+            .toString();
         client.prevCopyCount = client.newCopyCount;
         client.prevColorCopyCount = client.newColorCopyCount;
         client.newCopyCount = 0;
@@ -212,12 +215,13 @@ class ViewNonAgreementClientState extends State<ViewNonAgreementClientWidget> {
   }
 
   void changePaymentStatus() {
-    if(this.mounted){
+    if (this.mounted) {
       setState(() {
-              if(client.isInvoicePaid == true)
-                client.isInvoicePaid = false;
-                else client.isInvoicePaid = true;
-            });
+        if (client.isInvoicePaid == true)
+          client.isInvoicePaid = false;
+        else
+          client.isInvoicePaid = true;
+      });
       updateClient();
     }
   }
@@ -295,6 +299,30 @@ class ViewNonAgreementClientState extends State<ViewNonAgreementClientWidget> {
                         new Row(
                           children: <Widget>[
                             new Text(
+                              "E-Mail: ",
+                              style: new TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            new Padding(
+                                padding: new EdgeInsets.only(left: 5.0)),
+                            new Text(client.email),
+                          ],
+                        ),
+                        new Padding(padding: new EdgeInsets.only(bottom: 5.0)),
+                        new Row(
+                          children: <Widget>[
+                            new Text(
+                              "Telefon: ",
+                              style: new TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            new Padding(
+                                padding: new EdgeInsets.only(left: 5.0)),
+                            new Text(client.phone),
+                          ],
+                        ),
+                        new Padding(padding: new EdgeInsets.only(bottom: 5.0)),
+                        new Row(
+                          children: <Widget>[
+                            new Text(
                               "nazwa urządzenia: ",
                               style: new TextStyle(fontWeight: FontWeight.bold),
                             ),
@@ -356,15 +384,21 @@ class ViewNonAgreementClientState extends State<ViewNonAgreementClientWidget> {
                           new Text("Status faktury: "),
                           new Padding(padding: new EdgeInsets.only(left: 5.0)),
                           new Text(
-                            (client.isInvoicePaid)? "wystawiona": "niewystawiona",
+                            (client.isInvoicePaid)
+                                ? "wystawiona"
+                                : "niewystawiona",
                             style: new TextStyle(fontWeight: FontWeight.bold),
                           ),
                         ],
                       ),
                       new Padding(padding: new EdgeInsets.only(bottom: 5.0)),
                       new RaisedButton(
-                        child: new Text(client.isInvoicePaid? "wystawiono fakturę": "faktura do wystawienia"),
-                        color: client.isInvoicePaid? MyColors.greenButton: MyColors.flatButtonFill,
+                        child: new Text(client.isInvoicePaid
+                            ? "wystawiono fakturę"
+                            : "faktura do wystawienia"),
+                        color: client.isInvoicePaid
+                            ? MyColors.greenButton
+                            : MyColors.flatButtonFill,
                         onPressed: changePaymentStatus,
                       )
                     ],
@@ -385,8 +419,8 @@ class ViewNonAgreementClientState extends State<ViewNonAgreementClientWidget> {
                         children: <Widget>[new Text(client.notes.toString())],
                       ),
                       new TextField(
-                        decoration:
-                            InputDecoration(hintText: 'Dodaj notatkę...'),
+                        decoration: InputDecoration(
+                            hintText: 'Wpisz notatkę do wizyty...'),
                         controller: note,
                       ),
                       new Padding(padding: new EdgeInsets.only(bottom: 5.0)),
@@ -512,7 +546,7 @@ class ViewNonAgreementClientState extends State<ViewNonAgreementClientWidget> {
                       ),
                       new FlatButton(
                         child: new Text(
-                          "Dodaj zadanie!",
+                          "Zapisz zadanie!",
                           style: TextStyle(color: MyColors.flatButton),
                         ),
                         onPressed: addTask,
