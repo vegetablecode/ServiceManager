@@ -1,5 +1,6 @@
 import 'package:elbiserwis/Client.dart';
 import 'package:flutter/material.dart';
+import 'package:numberpicker/numberpicker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:elbiserwis/styles/MyColors.dart';
 import 'dart:io';
@@ -48,6 +49,27 @@ class ViewNonAgreementClientState extends State<ViewNonAgreementClientWidget> {
   var clientList;
 
   var importantTask = false; // checkbox
+
+  // numberpicker
+  int _currentIntValue = 1;
+  NumberPicker integerNumberPicker;
+
+  _handleValueChanged(num value) {
+    if (value != null) {
+      if (value is int) {
+        setState(() => _currentIntValue = value);
+      }
+    }
+  }
+
+  _handleValueChangedExternally(num value) {
+    if (value != null) {
+      if (value is int) {
+        setState(() => _currentIntValue = value);
+        integerNumberPicker.animateInt(value);
+      }
+    }
+  }
 
   // JSON create & read
   @override
@@ -188,7 +210,7 @@ class ViewNonAgreementClientState extends State<ViewNonAgreementClientWidget> {
   }
 
   void addNote() {
-     if ((this.mounted)&&(remindAfter.text!="")) {
+    if ((this.mounted)) {
       setState(() {
         // add note
         client.notes += dateToString(_appointmentDate);
@@ -201,7 +223,7 @@ class ViewNonAgreementClientState extends State<ViewNonAgreementClientWidget> {
         client.isInvoicePaid = false;
         client.lastDate = _appointmentDate.toIso8601String();
         client.nextDate = _appointmentDate
-            .add(new Duration(days: int.tryParse(remindAfter.text) * 30))
+            .add(new Duration(days: _currentIntValue * 30))
             .toString();
         client.prevCopyCount = client.newCopyCount;
         client.prevColorCopyCount = client.newColorCopyCount;
@@ -211,10 +233,10 @@ class ViewNonAgreementClientState extends State<ViewNonAgreementClientWidget> {
 
         // clear fields
         note.clear();
-        remindAfter.clear();
 
         // save client do json
         updateClient();
+        noteAddedDialog();
       });
     }
   }
@@ -269,6 +291,15 @@ class ViewNonAgreementClientState extends State<ViewNonAgreementClientWidget> {
 
   @override
   Widget build(BuildContext context) {
+    // numberpicker
+    integerNumberPicker = new NumberPicker.integer(
+        initialValue: _currentIntValue,
+        minValue: 1,
+        maxValue: 12,
+        step: 1,
+        onChanged: _handleValueChanged);
+
+    // Scaffold
     return new Scaffold(
         backgroundColor: MyColors.background,
         appBar: new AppBar(
@@ -423,45 +454,77 @@ class ViewNonAgreementClientState extends State<ViewNonAgreementClientWidget> {
                       new Row(
                         children: <Widget>[new Text(client.notes.toString())],
                       ),
-                      new TextField(
-                        decoration: InputDecoration(
-                            hintText: 'Wpisz notatkę do wizyty...'),
-                        controller: note,
-                      ),
                       new Padding(padding: new EdgeInsets.only(bottom: 5.0)),
-                      new TextField(
-                        decoration: InputDecoration(
-                            hintText: 'Przypomnij o serwisie za... (miesięcy)'),
-                        controller: remindAfter,
-                        keyboardType: TextInputType.numberWithOptions(
-                            signed: false, decimal: false),
-                      ),
-                      new Padding(padding: new EdgeInsets.only(bottom: 20.0)),
-                      new Row(
-                        children: <Widget>[
-                          new Text("Wybrana data: "),
-                          new Padding(padding: new EdgeInsets.only(left: 5.0)),
-                          new Text("${dateToString(_appointmentDate)}",
-                              style:
-                                  new TextStyle(fontWeight: FontWeight.bold)),
-                          new FlatButton(
-                            child: new Text(
-                              "Wybierz inną datę!",
-                              style: TextStyle(color: MyColors.flatButton),
-                            ),
-                            onPressed: () {
-                              _selectDate(context);
-                            },
-                          ),
-                        ],
-                      ),
+                      new Card(
+                          color: MyColors.light,
+                          child: new Center(
+                              child: new Container(
+                                  padding: new EdgeInsets.all(5.0),
+                                  child: new Column(
+                                    children: <Widget>[
+                                      new TextField(
+                                        decoration: InputDecoration(
+                                            hintText:
+                                                'Wpisz notatkę do wizyty...'),
+                                        controller: note,
+                                      ),
+                                    ],
+                                  )))),
+                      new Padding(padding: new EdgeInsets.only(bottom: 5.0)),
+                      new Card(
+                          color: MyColors.light,
+                          child: new Center(
+                              child: new Container(
+                                  padding: new EdgeInsets.all(5.0),
+                                  child: new Column(
+                                    children: <Widget>[
+                                      integerNumberPicker,
+                                      new FlatButton(
+                                        onPressed: () => _showIntDialog(),
+                                        child: new Text(
+                                            "Przypomnij o serwisie za: $_currentIntValue miesięcy"),
+                                      ),
+                                    ],
+                                  )))),
+                      new Padding(padding: new EdgeInsets.only(bottom: 5.0)),
+                      new Card(
+                          color: MyColors.light,
+                          child: new Center(
+                              child: new Container(
+                                  padding: new EdgeInsets.all(5.0),
+                                  child: new Column(
+                                    children: <Widget>[
+                                      new Row(
+                                        children: <Widget>[
+                                          new Text("Wybrana data: "),
+                                          new Padding(
+                                              padding: new EdgeInsets.only(
+                                                  left: 5.0)),
+                                          new Text(
+                                              "${dateToString(_appointmentDate)}",
+                                              style: new TextStyle(
+                                                  fontWeight: FontWeight.bold)),
+                                          new FlatButton(
+                                            child: new Text(
+                                              "Wybierz inną datę!",
+                                              style: TextStyle(
+                                                  color: MyColors.flatButton),
+                                            ),
+                                            onPressed: () {
+                                              _selectDate(context);
+                                            },
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  )))),
                       new Padding(padding: new EdgeInsets.only(bottom: 5.0)),
                       new FlatButton(
                         child: new Text(
                           "Zapisz wizytę!",
                           style: TextStyle(color: MyColors.flatButton),
                         ),
-                        onPressed: addNote,
+                        onPressed: clientCreatedDialog,
                       ),
                     ],
                   ),
@@ -602,5 +665,81 @@ class ViewNonAgreementClientState extends State<ViewNonAgreementClientWidget> {
       }
     }
     return newTasks;
+  }
+
+  Future _showIntDialog() async {
+    await showDialog<int>(
+      context: context,
+      builder: (BuildContext context) {
+        return new NumberPickerDialog.integer(
+          minValue: 0,
+          maxValue: 100,
+          step: 10,
+          initialIntegerValue: _currentIntValue,
+        );
+      },
+    ).then(_handleValueChangedExternally);
+  }
+
+    Future<Null> clientCreatedDialog() async {
+    return showDialog<Null>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return new AlertDialog(
+          title: new Text('Dodawanie wizyty'),
+          content: new SingleChildScrollView(
+            child: new ListBody(
+              children: <Widget>[
+                new Text(
+                    'Czy jesteś pewien, że chcesz dodać nową wizytę?'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            new FlatButton(
+              child: new Text('Ok'),
+              onPressed: () {
+                addNote();
+                Navigator.of(context).pop();
+              },
+            ),
+            new FlatButton(
+              child: new Text('Anuluj'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+   Future<Null> noteAddedDialog() async {
+    return showDialog<Null>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return new AlertDialog(
+          title: new Text('Dodawanie wizyty'),
+          content: new SingleChildScrollView(
+            child: new ListBody(
+              children: <Widget>[
+                new Text('Wizyta została dodana pomyślnie.'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            new FlatButton(
+              child: new Text('Ok'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 }

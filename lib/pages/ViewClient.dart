@@ -193,7 +193,8 @@ class ViewClientState extends State<ViewClientWidget> {
   }
 
   void addNote() {
-    if ((this.mounted)&&((counterStatus.text!="")&&(colorCounterStatus.text!=""))) {
+    if ((this.mounted) &&
+        ((counterStatus.text != "") && (colorCounterStatus.text != ""))) {
       setState(() {
         // add note
         client.notes += dateToString(_appointmentDate);
@@ -214,15 +215,18 @@ class ViewClientState extends State<ViewClientWidget> {
         client.newColorCopyCount = int.tryParse(colorCounterStatus.text) ?? 0;
         client.copiesLimitReached =
             (getPriceOfAddCopies() > 0.0) ? true : false;
-        
+
         // clear the fields
         note.clear();
         counterStatus.clear();
         colorCounterStatus.clear();
-        
+
         // save data
         updateClient();
+        noteAddedDialog();
       });
+    } else {
+      noDataDialog();
     }
   }
 
@@ -232,7 +236,8 @@ class ViewClientState extends State<ViewClientWidget> {
         print(name);
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => monthSummary.MonthSummary(name, client)),
+          MaterialPageRoute(
+              builder: (context) => monthSummary.MonthSummary(name, client)),
         );
       });
     }
@@ -642,7 +647,9 @@ class ViewClientState extends State<ViewClientWidget> {
                       new RaisedButton(
                         child: new Text("zobacz raport"),
                         color: MyColors.noTask,
-                        onPressed: (){openSummary(name, client);},
+                        onPressed: () {
+                          openSummary(name, client);
+                        },
                       )
                     ],
                   ),
@@ -661,53 +668,84 @@ class ViewClientState extends State<ViewClientWidget> {
                       new Row(
                         children: <Widget>[new Text(client.notes.toString())],
                       ),
-                      new TextField(
-                        decoration:
-                            InputDecoration(hintText: 'Wpisz notatkę do wizyty...'),
-                        controller: note,
-                      ),
+                      new Card(
+                          color: MyColors.light,
+                          child: new Center(
+                              child: new Container(
+                                  padding: new EdgeInsets.all(5.0),
+                                  child: new Column(
+                                    children: <Widget>[
+                                      new TextField(
+                                        decoration: InputDecoration(
+                                            hintText:
+                                                'Wpisz notatkę do wizyty...'),
+                                        controller: note,
+                                      ),
+                                      new Padding(
+                                          padding:
+                                              new EdgeInsets.only(bottom: 5.0)),
+                                      new TextField(
+                                        decoration: InputDecoration(
+                                            hintText:
+                                                'Dodaj stan licznika (czb)...'),
+                                        controller: counterStatus,
+                                        keyboardType:
+                                            TextInputType.numberWithOptions(
+                                                signed: false, decimal: false),
+                                      ),
+                                      new Padding(
+                                          padding:
+                                              new EdgeInsets.only(bottom: 5.0)),
+                                      new TextField(
+                                        decoration: InputDecoration(
+                                            hintText:
+                                                'Dodaj stan licznika (kolor)...'),
+                                        controller: colorCounterStatus,
+                                        keyboardType:
+                                            TextInputType.numberWithOptions(
+                                                signed: false, decimal: false),
+                                      ),
+                                    ],
+                                  )))),
                       new Padding(padding: new EdgeInsets.only(bottom: 5.0)),
-                      new TextField(
-                        decoration: InputDecoration(
-                            hintText: 'Dodaj stan licznika (czb)...'),
-                        controller: counterStatus,
-                        keyboardType: TextInputType.numberWithOptions(
-                            signed: false, decimal: false),
-                      ),
-                      new Padding(padding: new EdgeInsets.only(bottom: 5.0)),
-                      new TextField(
-                        decoration: InputDecoration(
-                            hintText: 'Dodaj stan licznika (kolor)...'),
-                        controller: colorCounterStatus,
-                        keyboardType: TextInputType.numberWithOptions(
-                            signed: false, decimal: false),
-                      ),
-                      new Padding(padding: new EdgeInsets.only(bottom: 20.0)),
-                      new Row(
-                        children: <Widget>[
-                          new Text("Wybrana data: "),
-                          new Padding(padding: new EdgeInsets.only(left: 5.0)),
-                          new Text("${dateToString(_appointmentDate)}",
-                              style:
-                                  new TextStyle(fontWeight: FontWeight.bold)),
-                          new FlatButton(
-                            child: new Text(
-                              "Wybierz inną datę!",
-                              style: TextStyle(color: MyColors.flatButton),
-                            ),
-                            onPressed: () {
-                              _selectDate(context);
-                            },
-                          ),
-                        ],
-                      ),
+                      new Card(
+                          color: MyColors.light,
+                          child: new Center(
+                              child: new Container(
+                                  padding: new EdgeInsets.all(5.0),
+                                  child: new Column(
+                                    children: <Widget>[
+                                      new Row(
+                                        children: <Widget>[
+                                          new Text("Wybrana data: "),
+                                          new Padding(
+                                              padding: new EdgeInsets.only(
+                                                  left: 5.0)),
+                                          new Text(
+                                              "${dateToString(_appointmentDate)}",
+                                              style: new TextStyle(
+                                                  fontWeight: FontWeight.bold)),
+                                          new FlatButton(
+                                            child: new Text(
+                                              "Wybierz inną datę!",
+                                              style: TextStyle(
+                                                  color: MyColors.flatButton),
+                                            ),
+                                            onPressed: () {
+                                              _selectDate(context);
+                                            },
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  )))),
                       new Padding(padding: new EdgeInsets.only(bottom: 5.0)),
                       new FlatButton(
                         child: new Text(
                           "Zapisz wizytę!",
                           style: TextStyle(color: MyColors.flatButton),
                         ),
-                        onPressed: addNote,
+                        onPressed: clientCreatedDialog,
                       ),
                     ],
                   ),
@@ -848,5 +886,93 @@ class ViewClientState extends State<ViewClientWidget> {
       }
     }
     return newTasks;
+  }
+
+  Future<Null> clientCreatedDialog() async {
+    return showDialog<Null>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return new AlertDialog(
+          title: new Text('Dodawanie wizyty'),
+          content: new SingleChildScrollView(
+            child: new ListBody(
+              children: <Widget>[
+                new Text('Czy jesteś pewien, że chcesz dodać nową wizytę?'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            new FlatButton(
+              child: new Text('Ok'),
+              onPressed: () {
+                addNote();
+                Navigator.of(context).pop();
+              },
+            ),
+            new FlatButton(
+              child: new Text('Anuluj'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+   Future<Null> noDataDialog() async {
+    return showDialog<Null>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return new AlertDialog(
+          title: new Text('Dodawanie wizyty'),
+          content: new SingleChildScrollView(
+            child: new ListBody(
+              children: <Widget>[
+                new Text('Nie możesz dodać wizyty bez podania stanu licznika'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            new FlatButton(
+              child: new Text('Ok'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+   Future<Null> noteAddedDialog() async {
+    return showDialog<Null>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return new AlertDialog(
+          title: new Text('Dodawanie wizyty'),
+          content: new SingleChildScrollView(
+            child: new ListBody(
+              children: <Widget>[
+                new Text('Wizyta została dodana pomyślnie.'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            new FlatButton(
+              child: new Text('Ok'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 }
