@@ -40,7 +40,7 @@ class HomeState extends State<HomeWidget> {
       fileExist = jsonFile.existsSync();
       if ((fileExist) && (this.mounted))
         this.setState(
-            () => fileContent = JSON.decode(jsonFile.readAsStringSync()));
+            () => fileContent = json.decode(jsonFile.readAsStringSync()));
             loadData();
     });
     /*firebaseMessaging.configure(
@@ -65,12 +65,12 @@ class HomeState extends State<HomeWidget> {
     File file = new File(dir.path + "/" + fileName);
     file.createSync();
     fileExist = true;
-    file.writeAsStringSync(JSON.encode(content));
+    file.writeAsStringSync(json.encode(content));
   }
 
   void writeAsNewFile(Map<String, dynamic> content) {
     createFile(content, dir, fileName);
-    this.setState(() => fileContent = JSON.decode(jsonFile.readAsStringSync()));
+    this.setState(() => fileContent = json.decode(jsonFile.readAsStringSync()));
     print("A new file with data has been created!");
   }
 
@@ -79,7 +79,7 @@ class HomeState extends State<HomeWidget> {
     var url = "https://elbiserwis-42e05.firebaseio.com/clients.json";
     var httpClient = Client();
     var removeData = await httpClient.delete(url);
-    var response = await httpClient.post(url, body: JSON.encode(fileContent));
+    var response = await httpClient.post(url, body: json.encode(fileContent));
     print("response=" + response.body);
   }
 
@@ -89,7 +89,7 @@ class HomeState extends State<HomeWidget> {
     var httpClient = Client();
     var response = await httpClient.get(url);
     this.setState(
-            () => fileContent = JSON.decode(response.body));
+            () => fileContent = json.decode(response.body));
     var key = fileContent.keys.toList();
     writeAsNewFile(fileContent[key[0]]);
   }

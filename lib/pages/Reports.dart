@@ -46,7 +46,7 @@ class ReportsState extends State<ReportsWidget> {
       fileExist = jsonFile.existsSync();
       if ((fileExist) && (this.mounted))
         this.setState(
-            () => fileContent = JSON.decode(jsonFile.readAsStringSync()));
+            () => fileContent = json.decode(jsonFile.readAsStringSync()));
       if (fileContent != null) {
         clientList = fileContent.keys.toList();
         for (int i = 0; i < fileContent.length; i++) {
@@ -65,7 +65,7 @@ class ReportsState extends State<ReportsWidget> {
       fileExist = jsonFile.existsSync();
       if ((fileExist) && (this.mounted)) {
         this.setState(
-            () => fileContent = JSON.decode(jsonFile.readAsStringSync()));
+            () => fileContent = json.decode(jsonFile.readAsStringSync()));
         clientList = fileContent.keys.toList();
 
         // update clients

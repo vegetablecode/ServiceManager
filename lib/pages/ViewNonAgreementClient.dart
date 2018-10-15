@@ -111,7 +111,7 @@ class ViewNonAgreementClientState extends State<ViewNonAgreementClientWidget> {
       fileExist = jsonFile.existsSync();
       if ((fileExist) && (this.mounted))
         this.setState(
-            () => fileContent = JSON.decode(jsonFile.readAsStringSync()));
+            () => fileContent = json.decode(jsonFile.readAsStringSync()));
       clientList = fileContent.keys.toList();
       client = Client.fromJson(fileContent[name]);
     });
@@ -122,7 +122,7 @@ class ViewNonAgreementClientState extends State<ViewNonAgreementClientWidget> {
     var url = "https://elbiserwis-42e05.firebaseio.com/clients.json";
     var httpClient = http.Client();
     var removeData = await httpClient.delete(url);
-    var response = await httpClient.post(url, body: JSON.encode(fileContent));
+    var response = await httpClient.post(url, body: json.encode(fileContent));
     print("response=" + response.body);
   }
 
@@ -148,12 +148,12 @@ class ViewNonAgreementClientState extends State<ViewNonAgreementClientWidget> {
     File file = new File(dir.path + "/" + fileName);
     file.createSync();
     fileExist = true;
-    file.writeAsStringSync(JSON.encode(content));
+    file.writeAsStringSync(json.encode(content));
   }
 
   void writeAsNewFile(Map<String, dynamic> content) {
     createFile(content, dir, fileName);
-    this.setState(() => fileContent = JSON.decode(jsonFile.readAsStringSync()));
+    this.setState(() => fileContent = json.decode(jsonFile.readAsStringSync()));
     saveData(jsonFile);
     print("A new file with data has been created!");
   }
@@ -165,12 +165,12 @@ class ViewNonAgreementClientState extends State<ViewNonAgreementClientWidget> {
       Map<String, dynamic> jsonFileContent =
           json.decode(jsonFile.readAsStringSync());
       jsonFileContent.addAll(content);
-      jsonFile.writeAsStringSync(JSON.encode(jsonFileContent));
+      jsonFile.writeAsStringSync(json.encode(jsonFileContent));
     } else {
       print("File does not exist!");
       createFile(content, dir, fileName);
     }
-    this.setState(() => fileContent = JSON.decode(jsonFile.readAsStringSync()));
+    this.setState(() => fileContent = json.decode(jsonFile.readAsStringSync()));
   }
 
   void importanTaskChanged(bool value) {
