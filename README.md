@@ -15,8 +15,3 @@ You can also create reports, add tasks and do a lot of other things. Everything 
 ![Main Window](/screenshots/4.png)
 ![Main Window](/screenshots/5.png)
 ![Main Window](/screenshots/6.png)
-![Main Window](/screenshots/7.png)
-![Main Window](/screenshots/8.png)
-![Main Window](/screenshots/9.png)
-![Main Window](/screenshots/10.png)
-![Main Window](/screenshots/11.png)
